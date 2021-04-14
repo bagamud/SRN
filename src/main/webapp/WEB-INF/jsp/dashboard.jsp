@@ -1,0 +1,47 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<html>
+<head>
+
+    <jsp:include page="../template/_metaStyle.jsp"/>
+    <title>Журнал УДС</title>
+
+</head>
+<body class="bg-light">
+<jsp:include page="../template/_menu.jsp"/>
+
+<div class="container-fluid">
+    <div class="py-3 row">
+        <main class="col-md-auto m-auto px-md-4" role="main">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">Журнал</h1>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Номер заявки</th>
+                        <th>Подразделение</th>
+                        <th>Кем выявлено</th>
+                        <th>Место</th>
+                        <th>Дата выявления</th>
+                        <th>Характер недостатка</th>
+                        <th>Значение</th>
+                        <th>Примененные технические средства</th>
+                        <th>Принятые меры</th>
+                        <th>Кому передано</th>
+                        <th>Результат</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    ${srnAllsb}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+</div>
+<jsp:include page="../template/_footer.jsp"/>
+</body>
+</html>
+
