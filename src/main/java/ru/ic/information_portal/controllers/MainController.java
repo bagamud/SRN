@@ -186,7 +186,7 @@ public class MainController {
                 depCode = user.getDepartment().getCode();
             }
         }
-        Iterable<StreetRoadNetwork> allSrnByDepCode = new ArrayList<>();
+        Iterable<StreetRoadNetwork> allSrnByDepCode;
         if (depCode == 1140000) allSrnByDepCode = srnRepository.findAll();
         else {
             allSrnByDepCode = srnRepository.findAllByDepartment_CodeOrderById(depCode);
@@ -218,6 +218,8 @@ public class MainController {
                     .append(srn.getMeasures().getTitle())
                     .append("</td><td>")
                     .append(srn.getSendTo())
+                    .append("</td><td>")
+                    .append(srn.getMeasuresDate())
                     .append("</td><td>")
                     .append(srn.getResult().getTitle())
                     .append("</td></tr>");

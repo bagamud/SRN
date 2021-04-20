@@ -8,6 +8,7 @@ public class Department {
 
     @Id
     private int id;
+    private int regCode;
     private int code;
     private String title;
 
@@ -17,6 +18,14 @@ public class Department {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getRegCode() {
+        return regCode;
+    }
+
+    public void setRegCode(int regCode) {
+        this.regCode = regCode;
     }
 
     public int getCode() {

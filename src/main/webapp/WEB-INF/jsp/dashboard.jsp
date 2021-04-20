@@ -1,10 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-
     <jsp:include page="../template/_metaStyle.jsp"/>
     <title>Журнал УДС</title>
-
 </head>
 <body class="bg-light">
 <jsp:include page="../template/_menu.jsp"/>
@@ -22,13 +20,14 @@
                         <th>Номер заявки</th>
                         <th>Подразделение</th>
                         <th>Кем выявлено</th>
-                        <th>Место</th>
+                        <th>Участок УДС</th>
                         <th>Дата выявления</th>
                         <th>Характер недостатка</th>
-                        <th>Значение</th>
-                        <th>Примененные технические средства</th>
+                        <th>Результаты замеров</th>
+                        <th>Примененные средства измерения</th>
                         <th>Принятые меры</th>
-                        <th>Кому передано</th>
+                        <th>Кому / в отношении кого</th>
+                        <th>Дата принятия мер</th>
                         <th>Результат</th>
                     </tr>
                     </thead>

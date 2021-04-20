@@ -1,7 +1,5 @@
 package ru.ic.information_portal.entity;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -33,6 +31,7 @@ public class StreetRoadNetwork {
     private Measures measures;
 
     private String sendTo;
+    private Date measuresDate;
 
     @ManyToOne(targetEntity = Result.class, fetch = FetchType.EAGER)
     private Result result;
@@ -134,6 +133,14 @@ public class StreetRoadNetwork {
 
     public void setSendTo(String sendTo) {
         this.sendTo = sendTo;
+    }
+
+    public Date getMeasuresDate() {
+        return measuresDate;
+    }
+
+    public void setMeasuresDate(Date measuresDate) {
+        this.measuresDate = measuresDate;
     }
 
     public Result getResult() {

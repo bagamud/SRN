@@ -5,9 +5,9 @@ import javax.persistence.Id;
 
 @Entity
 public class Result {
+    String title;
     @Id
     private int id;
-    String title;
 
     public int getId() {
         return id;
@@ -21,7 +21,7 @@ public class Result {
         return title;
     }
 
-    public void setTitle(String result) {
+    public void setTitle(String title) {
         this.title = title;
     }
 }

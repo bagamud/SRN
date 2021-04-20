@@ -1,5 +1,6 @@
 <%@ page import="ru.ic.information_portal.entity.Journal" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="ru.ic.information_portal.entity.StreetRoadNetwork" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html lang="ru">
 <head>
@@ -33,7 +34,7 @@
                                                         out.println("<tr><td>" + journal.getEntryDate()
                                                                 + "</td><td>" + journal.getSrn().getUsername()
                                                                 + "</td><td>" + journal.getSrn().getId()
-                                                                + "</td><td>" + journal.getSrnJson() + "</td></tr>");
+                                                                /* + "</td><td>" + journal.getSrnJson()*/ + "</td></tr>");
 
                                                     }
                                                 }
@@ -101,7 +102,7 @@
                                        value="${srn.foundWho}">
                             </div>
                             <div class=" col-md-8 mb-3">
-                                <label for="foundPlace">Место выявления</label>
+                                <label for="foundPlace">Участок УДС</label>
                                 <div class="input-group">
                                     <input class="form-control"
                                            id="foundPlace" type="text" name="foundPlace"
@@ -125,15 +126,12 @@
                                 </select>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="comment">Значение</label>
+                                <label for="comment">Результаты замеров</label>
                                 <input class="form-control" id="comment" name="comment"
                                        type="tel" value="${srn.comment}">
-                                <div class="invalid-feedback" style="width: 100%;">
-                                    Введите контакты пользователя
-                                </div>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="devices">Устройства</label>
+                                <label for="devices">Примененные средства измерения</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="devices"
                                         name="devices" required>
@@ -144,7 +142,7 @@
                         </div>
                         <hr class="mb-3">
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-5 mb-3">
                                 <label for="measures">Принятые меры</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="measures"
@@ -153,14 +151,40 @@
                                     ${measure}
                                 </select>
                             </div>
-                            <div class="col-md-5 mb-3">
-                                <label for="sendTo">Кому передано</label>
+                            <div class="col-md-7 mb-3">
+                                <label for="sendTo">Кому / в отношении кого</label>
                                 <input class="form-control" id="sendTo" name="sendTo"
                                        value="${srn.sendTo}">
-                                <div class="invalid-feedback" style="width: 100%;">
-                                    Введите контакты пользователя
-                                </div>
                             </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="measuresDate">Дата принятия мер</label>
+                                <input class="form-control" id="measuresDate" type="date" name="measuresDate"
+                                       value="${srn.measuresDate.toLocalDate()}"
+                                <%--                                       <% StreetRoadNetwork srn = (StreetRoadNetwork) request.getAttribute("srn");--%>
+
+                                <%--                                       if (srn != null && srn.getMeasures().getId() != 1)--%>
+                                <%--                                            out.print("required");%>--%>
+                                >
+                                <%--                            <script>--%>
+                                <%--                                var measures = document.getElementById("measures").querySelector("select");--%>
+                                <%--                                var require = false;--%>
+
+                                <%--                                measures.addEventListener('change', setRequired);--%>
+
+                                <%--                                document.getElementById("sendTo").setAttribute("value", measures.options.selectedIndex);--%>
+                                <%--                                function setRequired() {--%>
+                                <%--                                    var choice = measures.options.selectedIndex;--%>
+
+                                <%--                                    if (choice === 1) {--%>
+                                <%--                                        document.getElementById("sendTo").setAttribute("value", measures.value);--%>
+                                <%--                                    } else {--%>
+                                <%--                                        document.getElementById("sendTo").setAttribute("value", "false");--%>
+                                <%--                                    }--%>
+                                <%--                                }--%>
+
+                                <%--                            </script>--%>
+                            </div>
+
                             <div class="col-md-3 mb-3">
                                 <label for="result">Результат</label>
                                 <select class="form-control custom-select d-block w-100" id="result" name="result">
@@ -182,6 +206,9 @@
                                 <input class="btn btn-primary" type="submit"
                                        formaction="${pageContext.request.contextPath}/manager/fix"
                                        value="Выполнено"/>
+                                <input class="btn btn-primary" type="button"
+                                       onclick="location.href='${pageContext.request.contextPath}/dashboard'"
+                                       value="Назад"/>
                             </div>
                         </div>
                     </form>
