@@ -3,11 +3,11 @@
 <head>
     <jsp:include page="../template/_metaStyle.jsp"/>
     <title>Журнал УДС</title>
-    <link href="../css/signin.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/signin.css" rel="stylesheet">
 </head>
 <body class="text-center">
 <form class="form-signin" action="${pageContext.request.contextPath}/login" method="POST">
-    <img class="mb-4" src="../img/gibdd.png" alt="">
+    <img class="mb-4" src="${pageContext.request.contextPath}/img/gibdd.png" alt="">
     <h1 class="h3 mb-3 font-weight-normal">Авторизация</h1>
 
     <label for="username" class="sr-only">Логин</label>
@@ -19,5 +19,6 @@
     <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
     <p class="mt-5 mb-3 text-muted">&copy; 2020-2020</p>
 </form>
+
 </body>
 </html>

@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <img alt="Russian Federation" height="30" src="../img/mvd.png" style="margin-left: 10px" width="52"/>
+    <img alt="Russian Federation" height="30" src="${pageContext.request.contextPath}/img/mvd.png"
+         style="margin-left: 10px" width="52"/>
     <a class="navbar-brand nav-link mr-lg-auto" href="${pageContext.request.contextPath}/">Информационный портал
         УГИБДД</a>
     <div class="navbar-collapse">
@@ -12,11 +13,14 @@
             <li class="nav-item active">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/manager">Карточка</a>
             </li>
+
+
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
                 <a class="navbar-brand" id="principal">${pageContext.request.contextPath}</a>
             </li>
+
             <li class="nav-item">
                 <button class="navbar-brand btn-lg btn-primary" onclick="location.href='/logout'">
                     <svg class="bi bi-power" fill="currentColor" height="1em" viewBox="0 0 16 16" width="1em"
