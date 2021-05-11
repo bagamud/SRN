@@ -1,6 +1,6 @@
 <%@ page import="ru.ic.information_portal.entity.Journal" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="ru.ic.information_portal.entity.StreetRoadNetwork" %>
+<%@ page import="ru.ic.information_portal.entity.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html lang="ru">
 <head>
@@ -188,7 +188,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="result">Результат</label>
                                 <select class="form-control custom-select d-block w-100" id="result" name="result">
-                                    <option value="1">Не устранено</option>
+                                    <option value="1">Не устранен</option>
                                     ${result}
                                 </select>
                             </div>
@@ -217,6 +217,11 @@
         </main>
     </div>
 </div>
+<script>
+    document.getElementById('department').value = ${user.department.id};
+    let depCode = ${user.department.code};
+    document.getElementById('department').disabled = (depCode !== 1140000);
+</script>
 <jsp:include page="../template/_footer.jsp"/>
 </body>
 </html>

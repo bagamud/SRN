@@ -5,9 +5,10 @@ import javax.persistence.Id;
 
 @Entity
 public class Result {
-    String title;
     @Id
     private int id;
+    private boolean fixed;
+    private String title;
 
     public int getId() {
         return id;
@@ -15,6 +16,14 @@ public class Result {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isFixed() {
+        return fixed;
+    }
+
+    public void setFixed(boolean fixed) {
+        this.fixed = fixed;
     }
 
     public String getTitle() {

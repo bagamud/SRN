@@ -1,19 +1,21 @@
 package ru.ic.information_portal.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.ic.information_portal.reports.FormRequest;
 import ru.ic.information_portal.entity.*;
 import ru.ic.information_portal.repositories.*;
 
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 /**
  * В данном классе реализованы методы взаимодействия с сущностями проекта для взаимодействия с веб-формами интерфейса
@@ -60,6 +62,11 @@ public class MainController {
     @GetMapping(path = "/manager")
     public String manager(Model model) {
         getVocabulary(model);
+
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = usersRepository.findByUsername(userAuth.getUsername());
+        model.addAttribute("user", user);
+
         return "manager";
     }
 
@@ -76,12 +83,19 @@ public class MainController {
     public String getSrn(@RequestParam int id, Model model) {
         getVocabulary(model);
 
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = usersRepository.findByUsername(userAuth.getUsername());
+        model.addAttribute("user", user);
+
         try {
             StreetRoadNetwork srn = srnRepository.findById(id);
-            model.addAttribute("srn", srn);
-            model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(id));
+            if ((user.getDepartment().getCode() == 1140000) || srn.getDepartment().getCode() == user.getDepartment().getCode()) {
+                model.addAttribute("srn", srn);
+                model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(id));
+            }
+
         } catch (NumberFormatException | NullPointerException error) {
-            model.addAttribute("error", error.getMessage());
+            model.addAttribute("errors", error.getMessage());
         }
 
         return "manager";
@@ -102,14 +116,21 @@ public class MainController {
     public String addSrn(StreetRoadNetwork srn, BindingResult bindingResult, Model model) {
         getVocabulary(model);
 
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = usersRepository.findByUsername(userAuth.getUsername());
+        model.addAttribute("user", user);
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
         }
-
         try {
-            srn.setCreateDate(new Date(new java.util.Date().getTime()));
+            if (srn.getCreateDate() == null) {
+                srn.setCreateDate(new Date(new java.util.Date().getTime()));
+            }
             if (srn.getResult() == null) {
                 srn.setResult(resultRepository.findById(0));
+            }
+            if (srn.getDepartment() == null) {
+                srn.setDepartment(user.getDepartment());
             }
             model.addAttribute("srn", srnRepository.save(srn));
             journaling(srn);
@@ -152,9 +173,13 @@ public class MainController {
     public String fixSrn(@RequestParam int id, Model model) {
         getVocabulary(model);
 
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = usersRepository.findByUsername(userAuth.getUsername());
+        model.addAttribute("user", user);
+
         StreetRoadNetwork srn = srnRepository.findById(id);
 
-        srn.setResult(resultRepository.findById(1));
+        srn.setResult(resultRepository.findById(2));
         srn.setCloseDate(new Date(new java.util.Date().getTime()));
 
         try {
@@ -179,23 +204,34 @@ public class MainController {
     public String dashboard(Model model) {
         getVocabulary(model);
 
-        ArrayList<Users> users = (ArrayList<Users>) model.getAttribute("users");
-        int depCode = 1140000;
-        if (users != null) {
-            for (Users user : users) {
-                depCode = user.getDepartment().getCode();
-            }
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = usersRepository.findByUsername(userAuth.getUsername());
+        model.addAttribute("user", user);
+
+        int depCode = 0;
+        if (user != null) {
+            depCode = user.getDepartment().getCode();
         }
+
         Iterable<StreetRoadNetwork> allSrnByDepCode;
+
         if (depCode == 1140000) allSrnByDepCode = srnRepository.findAll();
         else {
             allSrnByDepCode = srnRepository.findAllByDepartment_CodeOrderById(depCode);
         }
+
         StringBuilder stringBuilder = new StringBuilder();
 
 
         for (StreetRoadNetwork srn : allSrnByDepCode) {
-            stringBuilder.append("<tr onclick=\"location.href='/manager/get?id=")
+            String color = "";
+            if ((new Date(new java.util.Date().getTime()).getTime() - srn.getFoundDate().getTime() > (7 * 24 * 60 * 60 * 1000))
+                    && !srn.getResult().isFixed()) {
+                color = "class=\"alert-danger\"";
+            }
+            stringBuilder.append("<tr ")
+                    .append(color)
+                    .append("onclick=\"location.href='/manager/get?id=")
                     .append(srn.getId())
                     .append("'\"")
                     .append("><td>")
@@ -236,7 +272,21 @@ public class MainController {
      * @param model интерфейс определяющий аттрибуты
      */
 
+    @GetMapping(path = "/reports")
+    public String reports(FormRequest formRequest, Model model) {
+        getVocabulary(model);
+
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = usersRepository.findByUsername(userAuth.getUsername());
+        model.addAttribute("user", user);
+
+
+
+        return "reports";
+    }
+
     private void getVocabulary(Model model) {
+
         StringBuilder sb = new StringBuilder();
         for (Shortcoming shortcoming : shortcomingRepository.findAll()) {
             sb.append("<option value=\"")
@@ -281,7 +331,6 @@ public class MainController {
         String measure = sb.toString();
         model.addAttribute("measure", measure);
 
-        model.addAttribute("users", usersRepository.findAll());
 
         sb = new StringBuilder();
         for (Result result : resultRepository.findAll()) {
@@ -293,8 +342,8 @@ public class MainController {
         }
         String result = sb.toString();
         model.addAttribute("result", result);
-    }
 
+    }
 
     public void journaling(StreetRoadNetwork srn) throws IOException {
         Journal journal = new Journal();

@@ -13,12 +13,14 @@
             <li class="nav-item active">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/manager">Карточка</a>
             </li>
-
+            <li class="nav-item active">
+                <a class="navbar-brand" href="${pageContext.request.contextPath}/reports">Отчеты</a>
+            </li>
 
         </ul>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="navbar-brand" id="principal">${pageContext.request.contextPath}</a>
+                <a class="navbar-brand" id="principal">${user.name}</a>
             </li>
 
             <li class="nav-item">
