@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.ic.information_portal.reports.FormRequest;
 import ru.ic.information_portal.entity.*;
+import ru.ic.information_portal.reports.ResponseFactory;
 import ru.ic.information_portal.repositories.*;
 
 import java.io.IOException;
@@ -280,7 +281,8 @@ public class MainController {
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
 
-
+        ResponseFactory res = new ResponseFactory();
+//        model.addAttribute("report", res.generateBaseReport());
 
         return "reports";
     }

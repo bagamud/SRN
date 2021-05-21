@@ -91,8 +91,7 @@
             </div>
 
             <div class="table-responsive">
-                <table class="table table-striped">
-                </table>
+                ${report}
             </div>
         </main>
     </div>
