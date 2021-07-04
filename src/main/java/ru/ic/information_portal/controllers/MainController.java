@@ -226,9 +226,12 @@ public class MainController {
 
         for (StreetRoadNetwork srn : allSrnByDepCode) {
             String color = "";
-            if ((new Date(new java.util.Date().getTime()).getTime() - srn.getFoundDate().getTime() > (7 * 24 * 60 * 60 * 1000))
-                    && !srn.getResult().isFixed()) {
-                color = "class=\"alert-danger\"";
+            if (srn.getFoundDate() != null) {
+                if (new Date(new java.util.Date().getTime()).getTime() - srn.getFoundDate().getTime() > (7 * 24 * 60 * 60 * 1000)) {
+                    if (!srn.getResult().isFixed()) {
+                        color = "class=\"alert-danger\"";
+                    } else color = "class=\"alert-warning\"";
+                }
             }
             stringBuilder.append("<tr ")
                     .append(color)

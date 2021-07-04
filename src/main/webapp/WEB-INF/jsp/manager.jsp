@@ -120,7 +120,7 @@
                                 <label for="shortcoming">Характер недостатка</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="shortcoming"
-                                        name="shortcoming" required>
+                                        name="shortcoming" required >
                                     <option value="${srn.shortcoming.id}">${srn.shortcoming.title}</option>
                                     ${shortcomings}
                                 </select>
@@ -147,7 +147,6 @@
                                 <select class="form-control custom-select d-block w-100"
                                         id="measures"
                                         name="measures">
-                                    <option value="1">Меры не принимались</option>
                                     ${measure}
                                 </select>
                             </div>
@@ -188,12 +187,10 @@
                             <div class="col-md-3 mb-3">
                                 <label for="result">Результат</label>
                                 <select class="form-control custom-select d-block w-100" id="result" name="result">
-                                    <option value="1">Не устранен</option>
                                     ${result}
                                 </select>
                             </div>
                         </div>
-
 
                         <hr class="mb-5">
                         <div class="row">
