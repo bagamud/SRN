@@ -6,7 +6,6 @@
 <head>
     <jsp:include page="../template/_metaStyle.jsp"/>
     <title>Журнал УДС</title>
-
 </head>
 <body class="bg-light">
 <jsp:include page="../template/_menu.jsp"/>
@@ -17,36 +16,6 @@
                 <h1 class="h2">Карточка</h1>
             </div>
             <div class="row">
-                <div class="col-md-5 order-md-2 mb-4 ">
-                    <div id="carousel" class="carousel" data-interval="false">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <div class="card">
-                                    <div class="card-header bg-info text-center text-light text-uppercase">
-                                        Журнал изменений
-                                    </div>
-                                    <div class="card-body">
-                                        <table>
-                                            <%
-                                                ArrayList<Journal> journalAll = (ArrayList<Journal>) request.getAttribute("journal");
-                                                if (journalAll != null) {
-                                                    for (Journal journal : journalAll) {
-                                                        out.println("<tr><td>" + journal.getEntryDate()
-                                                                + "</td><td>" + journal.getSrn().getUsername()
-                                                                + "</td><td>" + journal.getSrn().getId()
-                                                                /* + "</td><td>" + journal.getSrnJson()*/ + "</td></tr>");
-
-                                                    }
-                                                }
-
-                                            %>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="col-md-7 order-md-1">
                     <form class="needs-validation" action="${pageContext.request.contextPath}/manager" method="post"
@@ -71,12 +40,10 @@
                             <input class="form-control"
                                    id="username" type="hidden" name="username" hidden
                                    value="${pageContext.request.remoteUser}">
-
                             <div class="col-md-4 mb-3">
                                 <label for="createDate">Дата создания карточки</label>
                                 <input class="form-control" id="createDate" type="date" name="createDate"
                                        value="${srn.createDate.toLocalDate()}" disabled>
-
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="closeDate">Дата закрытия заявки</label>
@@ -120,7 +87,7 @@
                                 <label for="shortcoming">Характер недостатка</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="shortcoming"
-                                        name="shortcoming" required >
+                                        name="shortcoming" required>
                                     <option value="${srn.shortcoming.id}">${srn.shortcoming.title}</option>
                                     ${shortcomings}
                                 </select>
@@ -135,7 +102,6 @@
                                 <select class="form-control custom-select d-block w-100"
                                         id="devices"
                                         name="devices" required>
-                                    <option value="${srn.devices.id}">${srn.devices.title}</option>
                                     ${devices}
                                 </select>
                             </div>
@@ -158,32 +124,8 @@
                             <div class="col-md-4 mb-3">
                                 <label for="measuresDate">Дата принятия мер</label>
                                 <input class="form-control" id="measuresDate" type="date" name="measuresDate"
-                                       value="${srn.measuresDate.toLocalDate()}"
-                                <%--                                       <% StreetRoadNetwork srn = (StreetRoadNetwork) request.getAttribute("srn");--%>
-
-                                <%--                                       if (srn != null && srn.getMeasures().getId() != 1)--%>
-                                <%--                                            out.print("required");%>--%>
-                                >
-                                <%--                            <script>--%>
-                                <%--                                var measures = document.getElementById("measures").querySelector("select");--%>
-                                <%--                                var require = false;--%>
-
-                                <%--                                measures.addEventListener('change', setRequired);--%>
-
-                                <%--                                document.getElementById("sendTo").setAttribute("value", measures.options.selectedIndex);--%>
-                                <%--                                function setRequired() {--%>
-                                <%--                                    var choice = measures.options.selectedIndex;--%>
-
-                                <%--                                    if (choice === 1) {--%>
-                                <%--                                        document.getElementById("sendTo").setAttribute("value", measures.value);--%>
-                                <%--                                    } else {--%>
-                                <%--                                        document.getElementById("sendTo").setAttribute("value", "false");--%>
-                                <%--                                    }--%>
-                                <%--                                }--%>
-
-                                <%--                            </script>--%>
+                                       value="${srn.measuresDate.toLocalDate()}">
                             </div>
-
                             <div class="col-md-3 mb-3">
                                 <label for="result">Результат</label>
                                 <select class="form-control custom-select d-block w-100" id="result" name="result">
@@ -191,7 +133,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <hr class="mb-5">
                         <div class="row">
                             <div class="col-auto btn-group-lg">
@@ -209,6 +150,36 @@
                             </div>
                         </div>
                     </form>
+                </div>
+                <div class="col-md-5 order-md-2 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-info text-center text-light text-uppercase">
+                            Файлы
+                        </div>
+                        <div class="card-body" style="overflow-y: scroll; max-height: 59vh">
+                            ${data}
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header bg-info text-center text-light text-uppercase">
+                            Журнал изменений
+                        </div>
+                        <div class="card-body" style="overflow-y: scroll; max-height: 95px">
+                            <table class="table-sm">
+                                <%
+                                    ArrayList<Journal> journalAll = (ArrayList<Journal>) request.getAttribute("journal");
+                                    if (journalAll != null) {
+                                        for (Journal journal : journalAll) {
+                                            out.println("<tr><td>" + journal.getEntryDate()
+                                                    + "</td><td>" + journal.getSrn().getUsername()
+                                                    + "</td></tr>");
+                                        }
+                                    }
+                                %>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </main>

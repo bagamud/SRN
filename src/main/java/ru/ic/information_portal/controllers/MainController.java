@@ -9,8 +9,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.ic.information_portal.reports.FormRequest;
 import ru.ic.information_portal.entity.*;
+import ru.ic.information_portal.reports.FormRequest;
 import ru.ic.information_portal.reports.ResponseFactory;
 import ru.ic.information_portal.repositories.*;
 
@@ -33,6 +33,7 @@ public class MainController {
     final MeasuresRepository measuresRepository;
     final ResultRepository resultRepository;
     final JournalRepository journalRepository;
+    final RelatedFilesRepository relatedFilesRepository;
 
     public MainController(SrnRepository srnRepository,
                           DepartmentsRepository departmentRepository,
@@ -40,7 +41,7 @@ public class MainController {
                           ShortcomingRepository shortcomingRepository,
                           DevicesRepository devicesRepository,
                           MeasuresRepository measuresRepository,
-                          ResultRepository resultRepository, JournalRepository journalRepository) {
+                          ResultRepository resultRepository, JournalRepository journalRepository, RelatedFilesRepository relatedFilesRepository) {
         this.srnRepository = srnRepository;
         this.departmentRepository = departmentRepository;
         this.usersRepository = usersRepository;
@@ -49,6 +50,7 @@ public class MainController {
         this.measuresRepository = measuresRepository;
         this.resultRepository = resultRepository;
         this.journalRepository = journalRepository;
+        this.relatedFilesRepository = relatedFilesRepository;
     }
 
     /**
@@ -83,6 +85,7 @@ public class MainController {
     @GetMapping(path = "/manager/get")
     public String getSrn(@RequestParam int id, Model model) {
         getVocabulary(model);
+        model.addAttribute("data", getData(id));
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
@@ -116,6 +119,7 @@ public class MainController {
     @PostMapping(path = "/manager/add")
     public String addSrn(StreetRoadNetwork srn, BindingResult bindingResult, Model model) {
         getVocabulary(model);
+        model.addAttribute("data", getData(srn.getId()));
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
@@ -124,9 +128,12 @@ public class MainController {
             model.addAttribute("errors", bindingResult.getAllErrors());
         }
         try {
-            if (srn.getCreateDate() == null) {
-                srn.setCreateDate(new Date(new java.util.Date().getTime()));
-            }
+            if (srn.getId() != 0) {
+                if (srnRepository.findById(srn.getId()).getCreateDate() == null) {
+                    srn.setCreateDate(new Date(new java.util.Date().getTime()));
+                }
+            } else srn.setCreateDate(srnRepository.findById(srn.getId()).getCreateDate());
+
             if (srn.getResult() == null) {
                 srn.setResult(resultRepository.findById(0));
             }
@@ -142,6 +149,7 @@ public class MainController {
 
         return "manager";
     }
+
 
 //    /**
 //     * Метод контроллера реализующий обновление записи об инциденте из веб-формы в баз данных, возвращает обновленную
@@ -173,7 +181,7 @@ public class MainController {
     @PostMapping(path = "/manager/fix")
     public String fixSrn(@RequestParam int id, Model model) {
         getVocabulary(model);
-
+        model.addAttribute("data", getData(id));
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
@@ -213,16 +221,13 @@ public class MainController {
         if (user != null) {
             depCode = user.getDepartment().getCode();
         }
-
         Iterable<StreetRoadNetwork> allSrnByDepCode;
-
         if (depCode == 1140000) allSrnByDepCode = srnRepository.findAll();
         else {
             allSrnByDepCode = srnRepository.findAllByDepartment_CodeOrderById(depCode);
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-
 
         for (StreetRoadNetwork srn : allSrnByDepCode) {
             String color = "";
@@ -336,7 +341,6 @@ public class MainController {
         String measure = sb.toString();
         model.addAttribute("measure", measure);
 
-
         sb = new StringBuilder();
         for (Result result : resultRepository.findAll()) {
             sb.append("<option value=\"")
@@ -347,7 +351,20 @@ public class MainController {
         }
         String result = sb.toString();
         model.addAttribute("result", result);
+    }
 
+    private String getData(int srn_id) {
+        StringBuilder sb = new StringBuilder();
+        try {
+            for (RelatedFiles a : relatedFilesRepository.findAllBySrnOrderById(srn_id)) {
+                sb.append("<img src=\"")
+                        .append(a.getFileName())
+                        .append("\">");
+            }
+        } catch (NullPointerException e) {
+            sb.append("<p>Нет вложений</p>");
+        }
+        return sb.toString();
     }
 
     public void journaling(StreetRoadNetwork srn) throws IOException {
