@@ -1,9 +1,7 @@
 package ru.ic.information_portal.entity;
 
-import org.hibernate.type.BlobType;
-
-import javax.persistence.*;
-import java.sql.Blob;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 
 @Entity

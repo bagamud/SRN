@@ -89,14 +89,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.4.4</version>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.tomcat.maven</groupId>-->
-<!--                <artifactId>tomcat7-maven-plugin</artifactId>-->
-<!--                <version>2.2</version>-->
-<!--                <configuration>-->
-<!--                    <path>/srn</path>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.tomcat.maven</groupId>-->
+            <!--                <artifactId>tomcat7-maven-plugin</artifactId>-->
+            <!--                <version>2.2</version>-->
+            <!--                <configuration>-->
+            <!--                    <path>/srn</path>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 </project>
