@@ -92,18 +92,20 @@
                                     ${shortcomings}
                                 </select>
                             </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="comment">Результаты замеров</label>
-                                <input class="form-control" id="comment" name="comment"
-                                       type="tel" value="${srn.comment}">
-                            </div>
-                            <div class="col-md-3 mb-3">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
                                 <label for="devices">Примененные средства измерения</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="devices"
-                                        name="devices" required>
+                                        name="devices">
                                     ${devices}
                                 </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="comment">Результаты замеров</label>
+                                <input class="form-control" id="comment" name="comment"
+                                       type="tel" value="${srn.comment}">
                             </div>
                         </div>
                         <hr class="mb-3">
