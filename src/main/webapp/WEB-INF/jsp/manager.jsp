@@ -109,7 +109,7 @@
                         </div>
                         <hr class="mb-3">
                         <div class="row">
-                            <div class="col-md-5 mb-3">
+                            <div class="col-md-8 mb-3">
                                 <label for="measures">Принятые меры</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="measures"
@@ -117,17 +117,17 @@
                                     ${measure}
                                 </select>
                             </div>
-                            <div class="col-md-7 mb-3">
-                                <label for="sendTo">Кому / в отношении кого</label>
-                                <input class="form-control" id="sendTo" name="sendTo"
-                                       value="${srn.sendTo}">
-                            </div>
                             <div class="col-md-4 mb-3">
                                 <label for="measuresDate">Дата принятия мер</label>
                                 <input class="form-control" id="measuresDate" type="date" name="measuresDate"
                                        value="${srn.measuresDate.toLocalDate()}">
                             </div>
-                            <div class="col-md-3 mb-3">
+                            <div class="col-md-8 mb-3">
+                                <label for="sendTo">Кому / в отношении кого</label>
+                                <input class="form-control" id="sendTo" name="sendTo"
+                                       value="${srn.sendTo}">
+                            </div>
+                            <div class="col-md-4 mb-3">
                                 <label for="result">Результат</label>
                                 <select class="form-control custom-select d-block w-100" id="result" name="result">
                                     ${result}
@@ -157,7 +157,7 @@
                         <div class="card-header bg-info text-center text-light text-uppercase">
                             Файлы
                         </div>
-                        <div class="card-body" style="overflow-y: scroll; max-height: 59vh">
+                        <div class="card-body" style="overflow-y: scroll; max-height: 57vh">
                             ${data}
                         </div>
                     </div>
