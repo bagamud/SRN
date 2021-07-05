@@ -355,15 +355,12 @@ public class MainController {
 
     private String getData(int srn_id) {
         StringBuilder sb = new StringBuilder();
-        try {
             for (RelatedFiles a : relatedFilesRepository.findAllBySrnOrderById(srn_id)) {
                 sb.append("<img src=\"")
                         .append(a.getFileName())
-                        .append("\">");
+                        .append("\" width=\"545px\">");
             }
-        } catch (NullPointerException e) {
-            sb.append("<p>Нет вложений</p>");
-        }
+
         return sb.toString();
     }
 

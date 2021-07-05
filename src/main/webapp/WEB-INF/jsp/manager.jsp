@@ -51,7 +51,6 @@
                                        value="${srn.closeDate}" disabled>
                             </div>
                         </div>
-                        <hr class="mt-5">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="department">Подразделение</label>
@@ -83,7 +82,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-12 mb-3">
                                 <label for="shortcoming">Характер недостатка</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="shortcoming"
