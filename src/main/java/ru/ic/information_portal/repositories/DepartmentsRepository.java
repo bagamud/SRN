@@ -4,4 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import ru.ic.information_portal.entity.Department;
 
 public interface DepartmentsRepository extends CrudRepository<Department, Integer> {
+//    Iterable<Department> findAllOrderById();
 }

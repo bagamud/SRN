@@ -164,12 +164,14 @@
                             ${data}
                         </div>
                         <div class="card-footer">
-                            <form action="${pageContext.request.contextPath}/filesUpload" method="post">
-                                <input type="file" name="uploadFile">
+                            <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">
+                                <input type="file" class="form-control" name="file" multiple>
+                                <input type="hidden" name="id" value="${srn.id}">
                                 <input type="submit" value="Загрузить">
                             </form>
                         </div>
                     </div>
+                    <a href="/srnFiles/uploads/mvd.png" target="_blank"><img src="/srnFiles/uploads/mvd.png" alt="картинка"></a>
                     <%--                    <div class="card">--%>
                     <%--                        <div class="card-header bg-info text-center text-light text-uppercase">--%>
                     <%--                            Журнал изменений--%>

@@ -1,6 +1,7 @@
 package ru.ic.information_portal.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -9,14 +10,17 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import ru.ic.information_portal.entity.*;
 import ru.ic.information_portal.reports.FormRequest;
 import ru.ic.information_portal.reports.ResponseFactory;
 import ru.ic.information_portal.repositories.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 /**
  * В данном классе реализованы методы взаимодействия с сущностями проекта для взаимодействия с веб-формами интерфейса
@@ -34,6 +38,9 @@ public class MainController {
     final ResultRepository resultRepository;
     final JournalRepository journalRepository;
     final RelatedFilesRepository relatedFilesRepository;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     public MainController(SrnRepository srnRepository,
                           DepartmentsRepository departmentRepository,
@@ -151,10 +158,38 @@ public class MainController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return "manager";
     }
 
+    @PostMapping(path = "/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile file,
+                             StreetRoadNetwork srn,
+                             Model model) throws IOException {
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+
+        if (file != null) {
+            String uuid = UUID.randomUUID().toString();
+            String fileName = uuid + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/" + fileName));
+
+            RelatedFiles relatedFiles = new RelatedFiles();
+            relatedFiles.setSrn(srn.getId());
+            relatedFiles.setFileName("/srnFiles/uploads/" + fileName);
+            relatedFiles.setLoadDate(new Timestamp(new Date(new java.util.Date().getTime()).getTime()));
+            User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Users user = usersRepository.findByUsername(userAuth.getUsername());
+            relatedFiles.setLoadUserName(user.getUsername());
+
+            relatedFilesRepository.save(relatedFiles);
+            model.addAttribute("srn", srnRepository.findById(srn.getId()));
+            model.addAttribute("data", getData(srn.getId()));
+        }
+
+        return "manager";
+    }
 
 //    /**
 //     * Метод контроллера реализующий обновление записи об инциденте из веб-формы в баз данных, возвращает обновленную
@@ -173,38 +208,38 @@ public class MainController {
 //        return "manager";
 //    }
 
-    /**
-     * Метод контроллера реализующий обновление в баз данных статуса записи об инциденте
-     * на "Решен" и формирование даты решения заявки, возвращает обновленную
-     * запись из базы данных и записывает в аттрибуты для отображения в веб-форме
-     *
-     * @param id    идентификатор записи об инциденте
-     * @param model интерфейс определяющий аттрибуты
-     * @return возвращяет путь к странице
-     */
-
-    @PostMapping(path = "/manager/fix")
-    public String fixSrn(@RequestParam int id, Model model) {
-        getVocabulary(model);
-        model.addAttribute("data", getData(id));
-        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Users user = usersRepository.findByUsername(userAuth.getUsername());
-        model.addAttribute("user", user);
-
-        StreetRoadNetwork srn = srnRepository.findById(id);
-
-        srn.setResult(resultRepository.findById(2));
-        srn.setCloseDate(new Date(new java.util.Date().getTime()));
-
-        try {
-            model.addAttribute("srn", srnRepository.save(srn));
-            journaling(srn);
-            model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(id));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "manager";
-    }
+//    /**
+//     * Метод контроллера реализующий обновление в баз данных статуса записи об инциденте
+//     * на "Решен" и формирование даты решения заявки, возвращает обновленную
+//     * запись из базы данных и записывает в аттрибуты для отображения в веб-форме
+//     *
+//     * @param id    идентификатор записи об инциденте
+//     * @param model интерфейс определяющий аттрибуты
+//     * @return возвращяет путь к странице
+//     */
+//
+//    @PostMapping(path = "/manager/fix")
+//    public String fixSrn(@RequestParam int id, Model model) {
+//        getVocabulary(model);
+//        model.addAttribute("data", getData(id));
+//        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Users user = usersRepository.findByUsername(userAuth.getUsername());
+//        model.addAttribute("user", user);
+//
+//        StreetRoadNetwork srn = srnRepository.findById(id);
+//
+//        srn.setResult(resultRepository.findById(2));
+//        srn.setCloseDate(new Date(new java.util.Date().getTime()));
+//
+//        try {
+//            model.addAttribute("srn", srnRepository.save(srn));
+//            journaling(srn);
+//            model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(id));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return "manager";
+//    }
 
     /**
      * Метод контроллера страницы dashboard, в котором реализовано получение записей об инциденте,
@@ -293,8 +328,8 @@ public class MainController {
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
 
-        ResponseFactory res = new ResponseFactory(srnRepository);
-        model.addAttribute("report", res.generateBaseReport());
+        ResponseFactory res = new ResponseFactory(srnRepository, departmentRepository);
+        model.addAttribute("report", res.toHTML(res.generateBaseReport()));
 
         return "reports";
     }
@@ -362,7 +397,7 @@ public class MainController {
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnOrderById(srn_id)) {
             sb.append("<img src=\"")
                     .append(a.getFileName())
-                    .append("\" width=\"545px\">");
+                    .append("\" width=\"100%\">");
         }
 
         return sb.toString();

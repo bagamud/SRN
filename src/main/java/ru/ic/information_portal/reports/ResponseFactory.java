@@ -1,44 +1,82 @@
 package ru.ic.information_portal.reports;
 
+import ru.ic.information_portal.entity.Department;
+import ru.ic.information_portal.repositories.DepartmentsRepository;
 import ru.ic.information_portal.repositories.SrnRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseFactory {
     final SrnRepository srnRepository;
-    FormRequest formRequest;
+    final DepartmentsRepository departmentRepository;
+//    FormRequest formRequest;
 
-    public ResponseFactory(SrnRepository srnRepository) {
+    public ResponseFactory(SrnRepository srnRepository, DepartmentsRepository departmentRepository) {
         this.srnRepository = srnRepository;
+        this.departmentRepository = departmentRepository;
     }
 
-    public HashMap<String, Long> generateBaseReport() {
-        HashMap<String, Long> report = new HashMap<>();
+    public ArrayList<String[]> generateBaseReport() {
+        ArrayList<String[]> report = new ArrayList<>();
+        report.add(new String[]{"Наименование", "Всего карточек", "Исправлено", "Неисправлено"});
 
-        report.put("allSpbLo", srnRepository.count());
-        report.put("allSpb", srnRepository.countByDepartment_RegCode(1140));
-        report.put("allSpbNotFixed", srnRepository.countByDepartment_RegCodeAndResult_Fixed(1140, false));
-        report.put("allLo", srnRepository.countByDepartment_RegCode(1141));
-        report.put("allLoNotFixed", srnRepository.countByDepartment_RegCodeAndResult_Fixed(1141, false));
 
+        for (Department dep : departmentRepository.findAll()) {
+            report.add(new String[]{
+                    dep.getTitle(),
+                    String.valueOf(srnRepository.countByDepartment_code(dep.getCode())),
+                    String.valueOf(srnRepository.countByDepartment_codeAndResult_Fixed(dep.getCode(), true)),
+                    String.valueOf(srnRepository.countByDepartment_codeAndResult_Fixed(dep.getCode(), false))
+            });
+        }
+
+        report.add(new String[]{
+                "Санкт-Петербург",
+                String.valueOf(srnRepository.countByDepartment_RegCode(1140)),
+                String.valueOf(srnRepository.countByDepartment_RegCodeAndResult_Fixed(1140, true)),
+                String.valueOf(srnRepository.countByDepartment_RegCodeAndResult_Fixed(1140, false))
+        });
+        report.add(new String[]{
+                "Ленинградская область",
+                String.valueOf(srnRepository.countByDepartment_RegCode(1141)),
+                String.valueOf(srnRepository.countByDepartment_RegCodeAndResult_Fixed(1141, true)),
+                String.valueOf(srnRepository.countByDepartment_RegCodeAndResult_Fixed(1141, false))
+        });
+        report.add(new String[]{
+                "Всего",
+                String.valueOf(srnRepository.count()),
+                String.valueOf(srnRepository.countByResult_Fixed(true)),
+                String.valueOf(srnRepository.countByResult_Fixed(false))
+        });
         return report;
     }
 
-    public String generateReport(FormRequest formRequest) {
-        HashMap<String, Integer> report = new HashMap<>();
+//    public String generateReport(FormRequest formRequest) {
+//        ArrayList<String[]> report = new ArrayList<>();
 //        report.put("Всего по Санкт-Петербургу и Ленинградской области", srnRepository.countAll());
-        return toHTML(report);
-    }
+//        return toHTML(report);
+//    }
 
-    public String toHTML(HashMap<String, Integer> report) {
+    public String toHTML(ArrayList<String[]> report) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("<table>").append("<tr>");
-        for (Map.Entry<String, Integer> pair : report.entrySet()) {
-            sb.append("<td>").append(pair.getKey()).append("</td>").append("<td>").append(pair.getValue()).append("</td");
+        sb.append("<table class=\"table\">");
+        for (String[] strings : report) {
+            sb.append("<tr>")
+                    .append("<td>")
+                    .append(strings[0])
+                    .append("</td><td>")
+                    .append(strings[1])
+                    .append("</td><td>")
+                    .append(strings[2])
+                    .append("</td><td>")
+                    .append(strings[3])
+                    .append("</td>")
+                    .append("</tr>");
         }
-        sb.append("</tr>").append("</table>");
+        sb.append("</table>");
         return sb.toString();
     }
 }
