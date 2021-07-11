@@ -16,7 +16,6 @@
                 <h1 class="h2">Карточка</h1>
             </div>
             <div class="row">
-
                 <div class="col-md-7 order-md-1">
                     <form class="needs-validation" action="${pageContext.request.contextPath}/manager" method="post"
                           name="form" id="formId">
@@ -31,17 +30,18 @@
                                         Неправильный номер записи
                                     </div>
                                     <div class="input-group-append">
-                                        <button class="btn-light" type="submit" formaction="/manager/get"
+                                        <button class="btn-light" type="submit"
+                                                formaction="${pageContext.request.contextPath}/manager/get"
                                                 formmethod="get" formnovalidate>Поиск
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <input class="form-control"
-                                   id="username" type="hidden" name="username" hidden
-                                   value="${pageContext.request.remoteUser}">
+                            <%--                            <input class="form-control"--%>
+                            <%--                                   id="username" type="hidden" name="username" hidden--%>
+                            <%--                                   value="${pageContext.request.remoteUser}">--%>
                             <div class="col-md-4 mb-3">
-                                <label for="createDate">Дата создания карточки</label>
+                                <label for="createDate">Дата создания звявки</label>
                                 <input class="form-control" id="createDate" type="date" name="createDate"
                                        value="${srn.createDate.toLocalDate()}" disabled>
                             </div>
@@ -98,6 +98,7 @@
                                 <select class="form-control custom-select d-block w-100"
                                         id="devices"
                                         name="devices">
+                                    <option value="${srn.devices.id}">${srn.devices.title}</option>
                                     ${devices}
                                 </select>
                             </div>
@@ -114,6 +115,7 @@
                                 <select class="form-control custom-select d-block w-100"
                                         id="measures"
                                         name="measures">
+                                    <option value="${srn.measures.id}">${srn.measures.title}</option>
                                     ${measure}
                                 </select>
                             </div>
@@ -130,6 +132,7 @@
                             <div class="col-md-4 mb-3">
                                 <label for="result">Результат</label>
                                 <select class="form-control custom-select d-block w-100" id="result" name="result">
+                                    <option value="${srn.result.id}">${srn.result.title}</option>
                                     ${result}
                                 </select>
                             </div>
@@ -142,9 +145,9 @@
                                 <input class="btn btn-primary" type="button"
                                        onclick="location.href='${pageContext.request.contextPath}/manager'"
                                        value="Новый"/>
-                                <input class="btn btn-primary" type="submit"
-                                       formaction="${pageContext.request.contextPath}/manager/fix"
-                                       value="Выполнено"/>
+                                <%--                                <input class="btn btn-primary" type="submit"--%>
+                                <%--                                       formaction="${pageContext.request.contextPath}/manager/fix"--%>
+                                <%--                                       value="Выполнено"/>--%>
                                 <input class="btn btn-primary" type="button"
                                        onclick="location.href='${pageContext.request.contextPath}/dashboard'"
                                        value="Назад"/>
@@ -154,32 +157,38 @@
                 </div>
                 <div class="col-md-5 order-md-2 mb-4">
                     <div class="card">
-                        <div class="card-header bg-info text-center text-light text-uppercase">
-                            Файлы
+                        <div class="card-header bg-dark text-center text-light text-uppercase">
+                            Загруженное
                         </div>
                         <div class="card-body" style="overflow-y: scroll; max-height: 57vh">
                             ${data}
                         </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-header bg-info text-center text-light text-uppercase">
-                            Журнал изменений
-                        </div>
-                        <div class="card-body" style="overflow-y: scroll; max-height: 95px">
-                            <table class="table-sm">
-                                <%
-                                    ArrayList<Journal> journalAll = (ArrayList<Journal>) request.getAttribute("journal");
-                                    if (journalAll != null) {
-                                        for (Journal journal : journalAll) {
-                                            out.println("<tr><td>" + journal.getEntryDate()
-                                                    + "</td><td>" + journal.getSrn().getUsername()
-                                                    + "</td></tr>");
-                                        }
-                                    }
-                                %>
-                            </table>
+                        <div class="card-footer">
+                            <form action="${pageContext.request.contextPath}/filesUpload" method="post">
+                                <input type="file" name="uploadFile">
+                                <input type="submit" value="Загрузить">
+                            </form>
                         </div>
                     </div>
+                    <%--                    <div class="card">--%>
+                    <%--                        <div class="card-header bg-info text-center text-light text-uppercase">--%>
+                    <%--                            Журнал изменений--%>
+                    <%--                        </div>--%>
+                    <%--                        <div class="card-body" style="overflow-y: scroll; max-height: 95px">--%>
+                    <%--                            <table class="table-sm">--%>
+                    <%--                                <%--%>
+                    <%--                                    ArrayList<Journal> journalAll = (ArrayList<Journal>) request.getAttribute("journal");--%>
+                    <%--                                    if (journalAll != null) {--%>
+                    <%--                                        for (Journal journal : journalAll) {--%>
+                    <%--                                            out.println("<tr><td>" + journal.getEntryDate()--%>
+                    <%--                                                    + "</td><td>" + journal.getSrn().getUsername()--%>
+                    <%--                                                    + "</td></tr>");--%>
+                    <%--                                        }--%>
+                    <%--                                    }--%>
+                    <%--                                %>--%>
+                    <%--                            </table>--%>
+                    <%--                        </div>--%>
+                    <%--                    </div>--%>
 
                 </div>
             </div>

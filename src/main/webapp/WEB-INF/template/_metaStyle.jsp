@@ -6,4 +6,4 @@
 <link href="${pageContext.request.contextPath}/webjars/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Favicons -->
-<link rel="icon" href="../img/favicons/favicon.ico">
+<link rel="icon" href="${pageContext.request.contextPath}/img/favicons/favicon.ico">

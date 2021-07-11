@@ -6,17 +6,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseFactory {
-    SrnRepository srnRepository;
+    final SrnRepository srnRepository;
     FormRequest formRequest;
 
-    public HashMap<String, Integer> generateBaseReport() {
-        HashMap<String, Integer> report = new HashMap<>();
+    public ResponseFactory(SrnRepository srnRepository) {
+        this.srnRepository = srnRepository;
+    }
 
-//        report.put("allSpbLo", srnRepository.countAll());
-        report.put("allSpb", srnRepository.countAllByDepartment_RegCode(1140));
-        report.put("allSpbNotFixed", srnRepository.countAllByDepartment_RegCodeAndResult_Fixed(1140, false));
-        report.put("allLo", srnRepository.countAllByDepartment_RegCode(1141));
-        report.put("allLoNotFixed", srnRepository.countAllByDepartment_RegCodeAndResult_Fixed(1141, false));
+    public HashMap<String, Long> generateBaseReport() {
+        HashMap<String, Long> report = new HashMap<>();
+
+        report.put("allSpbLo", srnRepository.count());
+        report.put("allSpb", srnRepository.countByDepartment_RegCode(1140));
+        report.put("allSpbNotFixed", srnRepository.countByDepartment_RegCodeAndResult_Fixed(1140, false));
+        report.put("allLo", srnRepository.countByDepartment_RegCode(1141));
+        report.put("allLoNotFixed", srnRepository.countByDepartment_RegCodeAndResult_Fixed(1141, false));
 
         return report;
     }

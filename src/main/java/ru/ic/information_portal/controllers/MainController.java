@@ -124,22 +124,27 @@ public class MainController {
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
+
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
         }
+
         try {
-            if (srn.getId() != 0) {
-                if (srnRepository.findById(srn.getId()).getCreateDate() == null) {
-                    srn.setCreateDate(new Date(new java.util.Date().getTime()));
-                }
+            if (srn.getId() == 0 && srn.getCreateDate() == null) {
+                srn.setCreateDate(new Date(new java.util.Date().getTime()));
             } else srn.setCreateDate(srnRepository.findById(srn.getId()).getCreateDate());
 
             if (srn.getResult() == null) {
-                srn.setResult(resultRepository.findById(0));
+                srn.setResult(resultRepository.findById(1));
             }
+            if (srn.getResult().isFixed()) {
+                srn.setCloseDate(new Date(new java.util.Date().getTime()));
+            }
+
             if (srn.getDepartment() == null) {
                 srn.setDepartment(user.getDepartment());
             }
+
             model.addAttribute("srn", srnRepository.save(srn));
             journaling(srn);
             model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(srn.getId()));
@@ -240,7 +245,7 @@ public class MainController {
             }
             stringBuilder.append("<tr ")
                     .append(color)
-                    .append("onclick=\"location.href='/manager/get?id=")
+                    .append("onclick=\"location.href='/srn/manager/get?id=")
                     .append(srn.getId())
                     .append("'\"")
                     .append("><td>")
@@ -256,16 +261,15 @@ public class MainController {
                     .append("</td><td>")
                     .append(srn.getShortcoming().getTitle())
                     .append("</td><td>")
-                    .append(srn.getComment())
-                    .append("</td><td>")
-                    .append(srn.getDevices().getTitle())
-                    .append("</td><td>")
-                    .append(srn.getMeasures().getTitle())
-                    .append("</td><td>")
-                    .append(srn.getSendTo())
-                    .append("</td><td>")
-                    .append(srn.getMeasuresDate())
-                    .append("</td><td>")
+//                    .append(srn.getComment())
+//                    .append("</td><td>")
+//                    .append(srn.getDevices().getTitle())
+//                    .append("</td><td>")
+//                    .append(srn.getMeasures().getTitle())
+//                    .append("</td><td>")
+//                    .append(srn.getSendTo())
+//                    .append("</td><td>")
+//                    .append(srn.getMeasuresDate())
                     .append(srn.getResult().getTitle())
                     .append("</td></tr>");
         }
@@ -289,8 +293,8 @@ public class MainController {
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
 
-        ResponseFactory res = new ResponseFactory();
-//        model.addAttribute("report", res.generateBaseReport());
+        ResponseFactory res = new ResponseFactory(srnRepository);
+        model.addAttribute("report", res.generateBaseReport());
 
         return "reports";
     }
@@ -355,11 +359,11 @@ public class MainController {
 
     private String getData(int srn_id) {
         StringBuilder sb = new StringBuilder();
-            for (RelatedFiles a : relatedFilesRepository.findAllBySrnOrderById(srn_id)) {
-                sb.append("<img src=\"")
-                        .append(a.getFileName())
-                        .append("\" width=\"545px\">");
-            }
+        for (RelatedFiles a : relatedFilesRepository.findAllBySrnOrderById(srn_id)) {
+            sb.append("<img src=\"")
+                    .append(a.getFileName())
+                    .append("\" width=\"545px\">");
+        }
 
         return sb.toString();
     }

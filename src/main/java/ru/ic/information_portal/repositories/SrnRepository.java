@@ -10,16 +10,15 @@ public interface SrnRepository extends CrudRepository<StreetRoadNetwork, Integer
 
     Iterable<StreetRoadNetwork> findAllByDepartment_CodeOrderById(int code);
 
-    //    int countAll();
-    int countAllByResult_Fixed(boolean fixed);
+    long countByResult_Fixed(boolean fixed);
 
-    int countAllByDepartment_RegCode(int regCode);
+    long countByDepartment_RegCode(int regCode);
 
-    int countAllByDepartment_RegCodeAndResult_Fixed(int regCode, boolean fixed);
+    long countByDepartment_RegCodeAndResult_Fixed(int regCode, boolean fixed);
 
-    int countAllByDepartment_code(int code);
+    long countByDepartment_code(int code);
 
-    int countAllByDepartment_codeAndResult_Fixed(int code, boolean fixed);
+    long countByDepartment_codeAndResult_Fixed(int code, boolean fixed);
 
     int findAllByDepartment_CodeAndFoundDateBetweenAndShortcoming_IdAndMeasures_Id(int department_code, Date foundDate, Date foundDate2, int shortcoming_id, int measures_id);
 }

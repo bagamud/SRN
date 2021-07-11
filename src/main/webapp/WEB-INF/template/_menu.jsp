@@ -1,10 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <img alt="Russian Federation" height="30" src="${pageContext.request.contextPath}/img/mvd.png"
-         style="margin-left: 10px" width="52"/>
-    <a class="navbar-brand nav-link mr-lg-auto" href="${pageContext.request.contextPath}/">Информационный портал
-        УГИБДД</a>
+    <a class="navbar-brand nav-link mr-lg-auto" href="${pageContext.request.contextPath}/">
+        <img alt="Russian Federation"
+             height="30"
+             src="${pageContext.request.contextPath}/img/mvd.png"
+             style="margin-left: 10px"
+             width="52"/>
+    </a>
     <div class="navbar-collapse">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
@@ -24,7 +27,8 @@
             </li>
 
             <li class="nav-item">
-                <button class="navbar-brand btn-lg btn-primary" onclick="location.href='/logout'">
+                <button class="navbar-brand btn-lg btn-primary"
+                        onclick="location.href='${pageContext.request.contextPath}/logout'">
                     <svg class="bi bi-power" fill="currentColor" height="1em" viewBox="0 0 16 16" width="1em"
                          xmlns="http://www.w3.org/2000/svg">
                         <path d="M5.578 4.437a5 5 0 1 0 4.922.044l.5-.866a6 6 0 1 1-5.908-.053l.486.875z"
