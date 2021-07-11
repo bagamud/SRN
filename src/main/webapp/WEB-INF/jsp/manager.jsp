@@ -171,7 +171,6 @@
                             </form>
                         </div>
                     </div>
-                    <a href="/srnFiles/uploads/mvd.png" target="_blank"><img src="/srnFiles/uploads/mvd.png" alt="картинка"></a>
                     <%--                    <div class="card">--%>
                     <%--                        <div class="card-header bg-info text-center text-light text-uppercase">--%>
                     <%--                            Журнал изменений--%>
