@@ -9,6 +9,7 @@ public class Shortcoming {
     @Id
     private int id;
     private String title;
+//    private int ;
 
     public int getId() {
         return id;

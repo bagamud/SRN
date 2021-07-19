@@ -35,7 +35,7 @@ public class MainController {
     final ShortcomingRepository shortcomingRepository;
     final DevicesRepository devicesRepository;
     final MeasuresRepository measuresRepository;
-    final ResultRepository resultRepository;
+    final StatusRepository statusRepository;
     final JournalRepository journalRepository;
     final RelatedFilesRepository relatedFilesRepository;
 
@@ -48,14 +48,16 @@ public class MainController {
                           ShortcomingRepository shortcomingRepository,
                           DevicesRepository devicesRepository,
                           MeasuresRepository measuresRepository,
-                          ResultRepository resultRepository, JournalRepository journalRepository, RelatedFilesRepository relatedFilesRepository) {
+                          StatusRepository statusRepository,
+                          JournalRepository journalRepository,
+                          RelatedFilesRepository relatedFilesRepository) {
         this.srnRepository = srnRepository;
         this.departmentRepository = departmentRepository;
         this.usersRepository = usersRepository;
         this.shortcomingRepository = shortcomingRepository;
         this.devicesRepository = devicesRepository;
         this.measuresRepository = measuresRepository;
-        this.resultRepository = resultRepository;
+        this.statusRepository = statusRepository;
         this.journalRepository = journalRepository;
         this.relatedFilesRepository = relatedFilesRepository;
     }
@@ -90,7 +92,7 @@ public class MainController {
      */
 
     @GetMapping(path = "/manager/get")
-    public String getSrn(@RequestParam int id, Model model) {
+    public String getSrn(@RequestParam(defaultValue = "0") int id, Model model) {
         getVocabulary(model);
         model.addAttribute("data", getData(id));
 
@@ -141,10 +143,13 @@ public class MainController {
                 srn.setCreateDate(new Date(new java.util.Date().getTime()));
             } else srn.setCreateDate(srnRepository.findById(srn.getId()).getCreateDate());
 
-            if (srn.getResult() == null) {
-                srn.setResult(resultRepository.findById(1));
+            if (srn.getStatus() == null) {
+                srn.setStatus(statusRepository.findById(1));
+            } else if (srn.getReferralDate() != null && !srn.getStatus().isFixed()) {
+                srn.setStatus(statusRepository.findById(2));
             }
-            if (srn.getResult().isFixed()) {
+
+            if (srn.getStatus().isFixed()) {
                 srn.setCloseDate(new Date(new java.util.Date().getTime()));
             }
 
@@ -177,7 +182,7 @@ public class MainController {
 
             RelatedFiles relatedFiles = new RelatedFiles();
             relatedFiles.setSrn(srn.getId());
-            relatedFiles.setFileName("/srnFiles/uploads/" + fileName);
+            relatedFiles.setFileName("../uploads/" + fileName);
             relatedFiles.setLoadDate(new Timestamp(new Date(new java.util.Date().getTime()).getTime()));
             User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Users user = usersRepository.findByUsername(userAuth.getUsername());
@@ -208,7 +213,7 @@ public class MainController {
 //        return "manager";
 //    }
 
-//    /**
+    //    /**
 //     * Метод контроллера реализующий обновление в баз данных статуса записи об инциденте
 //     * на "Решен" и формирование даты решения заявки, возвращает обновленную
 //     * запись из базы данных и записывает в аттрибуты для отображения в веб-форме
@@ -218,28 +223,28 @@ public class MainController {
 //     * @return возвращяет путь к странице
 //     */
 //
-//    @PostMapping(path = "/manager/fix")
-//    public String fixSrn(@RequestParam int id, Model model) {
-//        getVocabulary(model);
-//        model.addAttribute("data", getData(id));
-//        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Users user = usersRepository.findByUsername(userAuth.getUsername());
-//        model.addAttribute("user", user);
-//
-//        StreetRoadNetwork srn = srnRepository.findById(id);
-//
-//        srn.setResult(resultRepository.findById(2));
-//        srn.setCloseDate(new Date(new java.util.Date().getTime()));
-//
-//        try {
-//            model.addAttribute("srn", srnRepository.save(srn));
-//            journaling(srn);
-//            model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(id));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return "manager";
-//    }
+    @PostMapping(path = "/manager/fix")
+    public String fixSrn(@RequestParam int id, Model model) {
+        getVocabulary(model);
+        model.addAttribute("data", getData(id));
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = usersRepository.findByUsername(userAuth.getUsername());
+        model.addAttribute("user", user);
+
+        StreetRoadNetwork srn = srnRepository.findById(id);
+
+        srn.setStatus(statusRepository.findById(3));
+        srn.setCloseDate(new Date(new java.util.Date().getTime()));
+
+        try {
+            model.addAttribute("srn", srnRepository.save(srn));
+            journaling(srn);
+            model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(id));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "manager";
+    }
 
     /**
      * Метод контроллера страницы dashboard, в котором реализовано получение записей об инциденте,
@@ -272,12 +277,29 @@ public class MainController {
         for (StreetRoadNetwork srn : allSrnByDepCode) {
             String color = "";
             if (srn.getFoundDate() != null) {
-                if (new Date(new java.util.Date().getTime()).getTime() - srn.getFoundDate().getTime() > (7 * 24 * 60 * 60 * 1000)) {
-                    if (!srn.getResult().isFixed()) {
-                        color = "class=\"alert-danger\"";
-                    } else color = "class=\"alert-warning\"";
+                if (srn.getReferralDate() != null) {
+                    if (new Date(new java.util.Date().getTime()).getTime()
+                            - srn.getReferralDate().getTime()
+                            > (7 * 24 * 60 * 60 * 1000)) {
+                        if (!srn.getStatus().isFixed()) {
+                            color = "class=\"alert-danger\"";
+                        } else color = "class=\"alert-warning\"";
+                    } else if (srn.getStatus().isFixed()) {
+                        color = "class=\"alert-success\"";
+                    }
+                } else {
+                    if (new Date(new java.util.Date().getTime()).getTime()
+                            - srn.getFoundDate().getTime()
+                            > (7 * 24 * 60 * 60 * 1000)) {
+                        if (!srn.getStatus().isFixed()) {
+                            color = "class=\"alert-danger\"";
+                        } else color = "class=\"alert-warning\"";
+                    } else if (srn.getStatus().isFixed()) {
+                        color = "class=\"alert-success\"";
+                    }
                 }
             }
+
             stringBuilder.append("<tr ")
                     .append(color)
                     .append("onclick=\"location.href='/srn/manager/get?id=")
@@ -305,7 +327,7 @@ public class MainController {
 //                    .append(srn.getSendTo())
 //                    .append("</td><td>")
 //                    .append(srn.getMeasuresDate())
-                    .append(srn.getResult().getTitle())
+                    .append(srn.getStatus().getTitle())
                     .append("</td></tr>");
         }
         model.addAttribute("srnAllsb", stringBuilder.toString());
@@ -381,15 +403,15 @@ public class MainController {
         model.addAttribute("measure", measure);
 
         sb = new StringBuilder();
-        for (Result result : resultRepository.findAll()) {
+        for (Status status : statusRepository.findAll()) {
             sb.append("<option value=\"")
-                    .append(result.getId())
+                    .append(status.getId())
                     .append("\">")
-                    .append(result.getTitle())
+                    .append(status.getTitle())
                     .append("</option>");
         }
-        String result = sb.toString();
-        model.addAttribute("result", result);
+        String status = sb.toString();
+        model.addAttribute("status", status);
     }
 
     private String getData(int srn_id) {

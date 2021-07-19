@@ -1,12 +1,15 @@
 package ru.ic.information_portal.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Timestamp;
 
 @Entity
 public class RelatedFiles {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int srn;
     private String fileName;

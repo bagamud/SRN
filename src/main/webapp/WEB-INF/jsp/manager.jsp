@@ -12,7 +12,7 @@
 <div class="container-fluid">
     <div class="py-3 row">
         <main class="col-md-9 m-auto col-lg-10 px-md-4" role="main">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
                 <h1 class="h2">Карточка</h1>
             </div>
             <div class="row">
@@ -40,45 +40,69 @@
                             <%--                            <input class="form-control"--%>
                             <%--                                   id="username" type="hidden" name="username" hidden--%>
                             <%--                                   value="${pageContext.request.remoteUser}">--%>
-                            <div class="col-md-4 mb-3">
-                                <label for="createDate">Дата создания звявки</label>
-                                <input class="form-control" id="createDate" type="date" name="createDate"
-                                       value="${srn.createDate.toLocalDate()}" disabled>
+                            <%--                            <div class="col-md-4 mb-3">--%>
+                            <%--                                <label for="createDate">Дата создания звявки</label>--%>
+                            <%--                                <input class="form-control" id="createDate" type="date" name="createDate"--%>
+                            <%--                                       value="${srn.createDate.toLocalDate()}" disabled>--%>
+                            <%--                            </div>--%>
+                            <%--                            <div class="col-md-4 mb-3">--%>
+                            <%--                                <label for="closeDate">Дата закрытия заявки</label>--%>
+                            <%--                                <input class="form-control" id="closeDate" name="closeDate" type="text"--%>
+                            <%--                                       value="${srn.closeDate}" disabled>--%>
+                            <%--                            </div>--%>
+                            <div class="col-md-5 mb-3">
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="closeDate">Дата закрытия заявки</label>
-                                <input class="form-control" id="closeDate" name="closeDate" type="text"
-                                       value="${srn.closeDate}" disabled>
+
+                            <div class="col-md-3 mb-3">
+                                <label for="status">Статус</label>
+                                <select class="form-control custom-select d-block w-100" id="status" name="status">
+                                    <option value="${srn.status.id}">${srn.status.title}</option>
+                                    ${status}
+                                </select>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-4 mb-3">
                                 <label for="department">Подразделение</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="department"
                                         name="department" required>
                                     <option value="${srn.department.id}">${srn.department.title}</option>
                                     ${departments}
-                                </select></div>
-                            <div class="col-md-6 mb-3">
+                                </select>
+                            </div>
+
+                            <div class="col-md-5 mb-3">
                                 <label for="foundWho">Кем выявлено</label>
                                 <input class="form-control" id="foundWho"
                                        required
                                        type="text" name="foundWho"
+                                       placeholder="ИДПС Иванов И.И."
                                        value="${srn.foundWho}">
                             </div>
-                            <div class=" col-md-8 mb-3">
-                                <label for="foundPlace">Участок УДС</label>
-                                <div class="input-group">
-                                    <input class="form-control"
-                                           id="foundPlace" type="text" name="foundPlace"
-                                           value="${srn.foundPlace}" required>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label for="foundDate">Дата выявления</label>
                                 <input class="form-control" id="foundDate" type="date" name="foundDate"
                                        value="${srn.foundDate.toLocalDate()}" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9 mb-3">
+                                <label for="foundPlace">Участок УДС</label>
+                                <%--                                <div class="input-group">--%>
+                                <input class="form-control"
+                                       id="foundPlace" type="text" name="foundPlace"
+                                       placeholder="Адрес, номер дома / дорога, километр"
+                                       value="${srn.foundPlace}" required>
+                                <%--                                </div>--%>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="foundPlaceType">Категория</label>
+                                <div class="input-group">
+                                    <input class="form-control"
+                                           id="foundPlaceType" type="text" name="foundPlace"
+                                           value="" <%--required--%>>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -105,12 +129,29 @@
                             <div class="col-md-4 mb-3">
                                 <label for="comment">Результаты замеров</label>
                                 <input class="form-control" id="comment" name="comment"
-                                       type="tel" value="${srn.comment}">
+                                       type="text"
+                                       placeholder="результат и единицы измерения"
+                                       value="${srn.comment}">
                             </div>
                         </div>
                         <hr class="mb-3">
                         <div class="row">
+
                             <div class="col-md-8 mb-3">
+                                <label for="sendTo">Кому передано</label>
+                                <input class="form-control" id="sendTo" name="sendTo"
+                                       value="${srn.sendTo}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="referralDate">Дата передачи</label>
+                                <input class="form-control" id="referralDate" type="date" name="referralDate"
+                                       value="${srn.referralDate.toLocalDate()}">
+                            </div>
+                        </div>
+                        <hr class="mb-3">
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
                                 <label for="measures">Принятые меры</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="measures"
@@ -119,22 +160,15 @@
                                     ${measure}
                                 </select>
                             </div>
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-5 mb-3">
+                                <label for="measureAgainst">В отношении кого</label>
+                                <input class="form-control" id="measureAgainst" name="measureAgainst"
+                                       value="${srn.measureAgainst}">
+                            </div>
+                            <div class="col-md-3 mb-3">
                                 <label for="measuresDate">Дата принятия мер</label>
                                 <input class="form-control" id="measuresDate" type="date" name="measuresDate"
                                        value="${srn.measuresDate.toLocalDate()}">
-                            </div>
-                            <div class="col-md-8 mb-3">
-                                <label for="sendTo">Кому / в отношении кого</label>
-                                <input class="form-control" id="sendTo" name="sendTo"
-                                       value="${srn.sendTo}">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="result">Результат</label>
-                                <select class="form-control custom-select d-block w-100" id="result" name="result">
-                                    <option value="${srn.result.id}">${srn.result.title}</option>
-                                    ${result}
-                                </select>
                             </div>
                         </div>
                         <hr class="mb-5">
@@ -144,10 +178,10 @@
                                        formaction="${pageContext.request.contextPath}/manager/add"/>
                                 <input class="btn btn-primary" type="button"
                                        onclick="location.href='${pageContext.request.contextPath}/manager'"
-                                       value="Новый"/>
-                                <%--                                <input class="btn btn-primary" type="submit"--%>
-                                <%--                                       formaction="${pageContext.request.contextPath}/manager/fix"--%>
-                                <%--                                       value="Выполнено"/>--%>
+                                       value="Новая"/>
+                                <input class="btn btn-primary" type="submit"
+                                       formaction="${pageContext.request.contextPath}/manager/fix"
+                                       value="Выполнено"/>
                                 <input class="btn btn-primary" type="button"
                                        onclick="location.href='${pageContext.request.contextPath}/dashboard'"
                                        value="Назад"/>
@@ -164,10 +198,11 @@
                             ${data}
                         </div>
                         <div class="card-footer">
-                            <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">
-                                <input type="file" class="form-control" name="file" multiple>
+                            <form action="${pageContext.request.contextPath}/upload" method="post"
+                                  enctype="multipart/form-data">
+                                <input type="file" class="" name="file" multiple>
                                 <input type="hidden" name="id" value="${srn.id}">
-                                <input type="submit" value="Загрузить">
+                                <input type="submit" class="float-lg-right" value="Загрузить">
                             </form>
                         </div>
                     </div>
@@ -193,6 +228,7 @@
 
                 </div>
             </div>
+
         </main>
     </div>
 </div>

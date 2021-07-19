@@ -27,14 +27,17 @@ public class StreetRoadNetwork {
     @ManyToOne(targetEntity = Devices.class, fetch = FetchType.EAGER)
     private Devices devices;
 
+    private String sendTo;
+    private Date referralDate;
+
     @ManyToOne(targetEntity = Measures.class, fetch = FetchType.EAGER)
     private Measures measures;
 
-    private String sendTo;
+    private String measureAgainst;
     private Date measuresDate;
 
-    @ManyToOne(targetEntity = Result.class, fetch = FetchType.EAGER)
-    private Result result;
+    @ManyToOne(targetEntity = Status.class, fetch = FetchType.EAGER)
+    private Status status;
 
     private Date closeDate;
     private String measuresIfNot;
@@ -119,6 +122,22 @@ public class StreetRoadNetwork {
         this.devices = devices;
     }
 
+    public String getSendTo() {
+        return sendTo;
+    }
+
+    public void setSendTo(String sendTo) {
+        this.sendTo = sendTo;
+    }
+
+    public Date getReferralDate() {
+        return referralDate;
+    }
+
+    public void setReferralDate(Date referralDate) {
+        this.referralDate = referralDate;
+    }
+
     public Measures getMeasures() {
         return measures;
     }
@@ -127,12 +146,12 @@ public class StreetRoadNetwork {
         this.measures = measures;
     }
 
-    public String getSendTo() {
-        return sendTo;
+    public String getMeasureAgainst() {
+        return measureAgainst;
     }
 
-    public void setSendTo(String sendTo) {
-        this.sendTo = sendTo;
+    public void setMeasureAgainst(String measureAgainst) {
+        this.measureAgainst = measureAgainst;
     }
 
     public Date getMeasuresDate() {
@@ -143,13 +162,6 @@ public class StreetRoadNetwork {
         this.measuresDate = measuresDate;
     }
 
-    public Result getResult() {
-        return result;
-    }
-
-    public void setResult(Result result) {
-        this.result = result;
-    }
 
     public Date getCloseDate() {
         return closeDate;
@@ -165,5 +177,13 @@ public class StreetRoadNetwork {
 
     public void setMeasuresIfNot(String measuresIfNot) {
         this.measuresIfNot = measuresIfNot;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

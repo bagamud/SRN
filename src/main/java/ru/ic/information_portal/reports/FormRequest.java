@@ -16,7 +16,7 @@ public class FormRequest {
     private Devices devices;
     private Measures measures;
     private Date measuresDate;
-    private Result result;
+    private Status status;
     private Date closeDate;
 
     public Date getCreateDate() {
@@ -83,12 +83,12 @@ public class FormRequest {
         this.measuresDate = measuresDate;
     }
 
-    public Result getResult() {
-        return result;
+    public Status getResult() {
+        return status;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
+    public void setResult(Status status) {
+        this.status = status;
     }
 
     public Date getCloseDate() {

@@ -5,8 +5,6 @@ import ru.ic.information_portal.repositories.DepartmentsRepository;
 import ru.ic.information_portal.repositories.SrnRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ResponseFactory {
     final SrnRepository srnRepository;
@@ -20,35 +18,35 @@ public class ResponseFactory {
 
     public ArrayList<String[]> generateBaseReport() {
         ArrayList<String[]> report = new ArrayList<>();
-        report.add(new String[]{"Наименование", "Всего карточек", "Исправлено", "Неисправлено"});
+        report.add(new String[]{"Наименование", "Всего", "Закрыто", "В работе"});
 
 
         for (Department dep : departmentRepository.findAll()) {
             report.add(new String[]{
                     dep.getTitle(),
                     String.valueOf(srnRepository.countByDepartment_code(dep.getCode())),
-                    String.valueOf(srnRepository.countByDepartment_codeAndResult_Fixed(dep.getCode(), true)),
-                    String.valueOf(srnRepository.countByDepartment_codeAndResult_Fixed(dep.getCode(), false))
+                    String.valueOf(srnRepository.countByDepartment_codeAndStatus_Fixed(dep.getCode(), true)),
+                    String.valueOf(srnRepository.countByDepartment_codeAndStatus_Fixed(dep.getCode(), false))
             });
         }
 
         report.add(new String[]{
                 "Санкт-Петербург",
                 String.valueOf(srnRepository.countByDepartment_RegCode(1140)),
-                String.valueOf(srnRepository.countByDepartment_RegCodeAndResult_Fixed(1140, true)),
-                String.valueOf(srnRepository.countByDepartment_RegCodeAndResult_Fixed(1140, false))
+                String.valueOf(srnRepository.countByDepartment_RegCodeAndStatus_Fixed(1140, true)),
+                String.valueOf(srnRepository.countByDepartment_RegCodeAndStatus_Fixed(1140, false))
         });
         report.add(new String[]{
                 "Ленинградская область",
                 String.valueOf(srnRepository.countByDepartment_RegCode(1141)),
-                String.valueOf(srnRepository.countByDepartment_RegCodeAndResult_Fixed(1141, true)),
-                String.valueOf(srnRepository.countByDepartment_RegCodeAndResult_Fixed(1141, false))
+                String.valueOf(srnRepository.countByDepartment_RegCodeAndStatus_Fixed(1141, true)),
+                String.valueOf(srnRepository.countByDepartment_RegCodeAndStatus_Fixed(1141, false))
         });
         report.add(new String[]{
                 "Всего",
                 String.valueOf(srnRepository.count()),
-                String.valueOf(srnRepository.countByResult_Fixed(true)),
-                String.valueOf(srnRepository.countByResult_Fixed(false))
+                String.valueOf(srnRepository.countByStatus_Fixed(true)),
+                String.valueOf(srnRepository.countByStatus_Fixed(false))
         });
         return report;
     }

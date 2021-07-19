@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Result {
+public class Status {
     @Id
     private int id;
     private boolean fixed;

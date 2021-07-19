@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/dashboard", "/manager").authenticated()
+                .antMatchers("/dashboard", "/manager", "/reports").authenticated()
                 .and()
                 .httpBasic()
                 .realmName("Журнал недостатков улично дорожной сети")
