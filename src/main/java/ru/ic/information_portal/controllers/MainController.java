@@ -37,6 +37,8 @@ public class MainController {
     final MeasuresRepository measuresRepository;
     final StatusRepository statusRepository;
     final JournalRepository journalRepository;
+    final RoadCategoryRepository roadCategoryRepository;
+    final SFixTermRepository sFixTermRepository;
     final RelatedFilesRepository relatedFilesRepository;
 
     @Value("${upload.path}")
@@ -50,7 +52,7 @@ public class MainController {
                           MeasuresRepository measuresRepository,
                           StatusRepository statusRepository,
                           JournalRepository journalRepository,
-                          RelatedFilesRepository relatedFilesRepository) {
+                          RoadCategoryRepository roadCategoryRepository, SFixTermRepository sFixTermRepository, RelatedFilesRepository relatedFilesRepository) {
         this.srnRepository = srnRepository;
         this.departmentRepository = departmentRepository;
         this.usersRepository = usersRepository;
@@ -59,6 +61,8 @@ public class MainController {
         this.measuresRepository = measuresRepository;
         this.statusRepository = statusRepository;
         this.journalRepository = journalRepository;
+        this.roadCategoryRepository = roadCategoryRepository;
+        this.sFixTermRepository = sFixTermRepository;
         this.relatedFilesRepository = relatedFilesRepository;
     }
 
@@ -176,13 +180,13 @@ public class MainController {
         }
 
         if (file != null) {
-            String uuid = UUID.randomUUID().toString();
-            String fileName = uuid + "." + file.getOriginalFilename();
+//            String uuid = UUID.randomUUID().toString();
+            String fileName = file.getOriginalFilename();
             file.transferTo(new File(uploadPath + "/" + fileName));
 
             RelatedFiles relatedFiles = new RelatedFiles();
             relatedFiles.setSrn(srn.getId());
-            relatedFiles.setFileName("../uploads/" + fileName);
+            relatedFiles.setFileName(srn.getId() + "." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + fileName);
             relatedFiles.setLoadDate(new Timestamp(new Date(new java.util.Date().getTime()).getTime()));
             User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Users user = usersRepository.findByUsername(userAuth.getUsername());
@@ -276,11 +280,13 @@ public class MainController {
 
         for (StreetRoadNetwork srn : allSrnByDepCode) {
             String color = "";
+            boolean endTerm = new Date(new java.util.Date().getTime()).getTime()
+                    - srn.getReferralDate().getTime()
+                    > (7 * 24 * 60 * 60 * 1000);
+//                    > (sFixTermRepository.findByShortcomingIdAndRoadCategoryId(srn.getShortcoming().getId(), srn.getRoadCategory().getId()).getFixTerm());
             if (srn.getFoundDate() != null) {
                 if (srn.getReferralDate() != null) {
-                    if (new Date(new java.util.Date().getTime()).getTime()
-                            - srn.getReferralDate().getTime()
-                            > (7 * 24 * 60 * 60 * 1000)) {
+                    if (endTerm) {
                         if (!srn.getStatus().isFixed()) {
                             color = "class=\"alert-danger\"";
                         } else color = "class=\"alert-warning\"";
@@ -288,9 +294,7 @@ public class MainController {
                         color = "class=\"alert-success\"";
                     }
                 } else {
-                    if (new Date(new java.util.Date().getTime()).getTime()
-                            - srn.getFoundDate().getTime()
-                            > (7 * 24 * 60 * 60 * 1000)) {
+                    if (endTerm) {
                         if (!srn.getStatus().isFixed()) {
                             color = "class=\"alert-danger\"";
                         } else color = "class=\"alert-warning\"";
@@ -371,11 +375,13 @@ public class MainController {
 
         sb = new StringBuilder();
         for (Department department : departmentRepository.findAll()) {
-            sb.append("<option value=\"")
-                    .append(department.getId())
-                    .append("\">")
-                    .append(department.getTitle())
-                    .append("</option>");
+            if (department.getCode() != 1140000) {
+                sb.append("<option value=\"")
+                        .append(department.getId())
+                        .append("\">")
+                        .append(department.getTitle())
+                        .append("</option>");
+            }
         }
         String departments = sb.toString();
         model.addAttribute("departments", departments);
@@ -412,12 +418,24 @@ public class MainController {
         }
         String status = sb.toString();
         model.addAttribute("status", status);
+
+
+        sb = new StringBuilder();
+        for (RoadCategory roadCategory : roadCategoryRepository.findAll()) {
+            sb.append("<option value=\"")
+                    .append(roadCategory.getId())
+                    .append("\">")
+                    .append(roadCategory.getTitle())
+                    .append("</option>");
+        }
+        String roadCategory = sb.toString();
+        model.addAttribute("roadCategories", roadCategory);
     }
 
     private String getData(int srn_id) {
         StringBuilder sb = new StringBuilder();
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnOrderById(srn_id)) {
-            sb.append("<img src=\"")
+            sb.append("<img src=\"../uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }

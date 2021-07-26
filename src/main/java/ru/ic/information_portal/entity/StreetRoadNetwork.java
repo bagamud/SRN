@@ -18,6 +18,9 @@ public class StreetRoadNetwork {
     private String foundWho;
     private String foundPlace;
 
+    @ManyToOne(targetEntity = RoadCategory.class, fetch = FetchType.EAGER)
+    private RoadCategory roadCategory;
+
     private Date foundDate;
 
     @ManyToOne(targetEntity = Shortcoming.class, fetch = FetchType.EAGER)
@@ -88,6 +91,15 @@ public class StreetRoadNetwork {
 
     public void setFoundPlace(String foundPlace) {
         this.foundPlace = foundPlace;
+    }
+
+
+    public RoadCategory getRoadCategory() {
+        return roadCategory;
+    }
+
+    public void setRoadCategory(RoadCategory roadCategory) {
+        this.roadCategory = roadCategory;
     }
 
     public Date getFoundDate() {

@@ -30,7 +30,7 @@
                                         Неправильный номер записи
                                     </div>
                                     <div class="input-group-append">
-                                        <button class="btn-light" type="submit"
+                                        <button class="btn btn-outline-secondary" type="submit"
                                                 formaction="${pageContext.request.contextPath}/manager/get"
                                                 formmethod="get" formnovalidate>Поиск
                                         </button>
@@ -97,12 +97,13 @@
                                 <%--                                </div>--%>
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="foundPlaceType">Категория</label>
-                                <div class="input-group">
-                                    <input class="form-control"
-                                           id="foundPlaceType" type="text" name="foundPlace"
-                                           value="" <%--required--%>>
-                                </div>
+                                <label for="roadCategory">Категория</label>
+                                <select class="form-control custom-select d-block w-100"
+                                        id="roadCategory"
+                                        name="roadCategory" required>
+                                    <option value="${srn.roadCategory.id}">${srn.roadCategory.title}</option>
+                                    ${roadCategories}
+                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -200,12 +201,13 @@
                         <div class="card-footer">
                             <form action="${pageContext.request.contextPath}/upload" method="post"
                                   enctype="multipart/form-data">
-                                <input type="file" class="" name="file" multiple>
+                                <input type="file" class="" name="file">
                                 <input type="hidden" name="id" value="${srn.id}">
                                 <input type="submit" class="float-lg-right" value="Загрузить">
                             </form>
                         </div>
                     </div>
+
                     <%--                    <div class="card">--%>
                     <%--                        <div class="card-header bg-info text-center text-light text-uppercase">--%>
                     <%--                            Журнал изменений--%>
@@ -232,11 +234,11 @@
         </main>
     </div>
 </div>
-<script>
-    document.getElementById('department').value = ${user.department.id};
-    let depCode = ${user.department.code};
-    document.getElementById('department').disabled = (depCode !== 1140000);
-</script>
+<%--<script>--%>
+<%--    document.getElementById('department').value = ${user.department.id};--%>
+<%--    let depCode = ${user.department.code};--%>
+<%--    document.getElementById('department').disabled = (depCode !== 1140000);--%>
+<%--</script>--%>
 <jsp:include page="../template/_footer.jsp"/>
 </body>
 </html>

@@ -4,11 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Shortcoming {
+public class RoadCategory {
 
     @Id
-    private int id;
-    private String title;
+    int id;
+    String title;
 
     public int getId() {
         return id;

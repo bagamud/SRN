@@ -9,7 +9,7 @@
              width="52"/>
     </a>
     <div class="navbar-collapse">
-        <ul class="navbar-nav mr-auto">
+        <ul class="navbar-nav col-md-9">
             <li class="nav-item active">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/dashboard">Журнал</a>
             </li>
@@ -19,9 +19,8 @@
             <li class="nav-item active">
                 <a class="navbar-brand" href="${pageContext.request.contextPath}/reports">Отчеты</a>
             </li>
-
         </ul>
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav col-md-3">
             <li class="nav-item active">
                 <a class="navbar-brand" id="principal">${user.name}</a>
             </li>
@@ -40,4 +39,5 @@
         </ul>
     </div>
 </nav>
+
 
