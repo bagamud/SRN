@@ -77,7 +77,8 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="control">Контроль</label>
-                                    <input type="text" class="form-control" id="control" value="${srn.control}" <%if (request.getAttribute("user") != null) out.print("disabled");%>/>
+                                    <input type="text" class="form-control" id="control" value="${srn.control}"
+                                            <%if (request.getAttribute("user") != null) out.print("disabled");%>/>
                                 </div>
 
                             </div>
