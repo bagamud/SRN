@@ -36,7 +36,7 @@
                             <legend>Раздел 1
                             </legend>
                             <div class="row">
-                                <div class=" col-md-4 mb-3">
+                                <div class=" col-md-3 mb-3">
                                     <label for="id">Номер</label>
                                     <div class="input-group">
                                         <input class="form-control <%if (request.getAttribute("error") != null) out.print("is-invalid");%>"
@@ -66,8 +66,6 @@
                                 <%--                                <input class="form-control" id="closeDate" name="closeDate" type="text"--%>
                                 <%--                                       value="${srn.closeDate}" disabled>--%>
                                 <%--                            </div>--%>
-                                <div class="col-md-5 mb-3">
-                                </div>
 
                                 <div class="col-md-3 mb-3">
                                     <label for="status">Статус</label>
@@ -77,6 +75,11 @@
                                         ${status}
                                     </select>
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="control">Контроль</label>
+                                    <input type="text" class="form-control" id="control" value="${srn.control}" <%if (request.getAttribute("user") != null) out.print("disabled");%>/>
+                                </div>
+
                             </div>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
@@ -169,7 +172,7 @@
                                            value="${srn.referralDate.toLocalDate()}">
                                 </div>
                             </div>
-<%--                            <hr class="mb-3">--%>
+                            <%--                            <hr class="mb-3">--%>
 
                             <div class="row">
                                 <div class="col-md-4 mb-3">
@@ -192,24 +195,24 @@
                                            value="${srn.measuresDate.toLocalDate()}">
                                 </div>
                             </div>
-<%--                            <hr class="mb-5">                  --%>
+                            <%--                            <hr class="mb-5">                  --%>
                         </fieldset>
 
                         <div class="row">
-                                <div class="col-auto btn-group-lg">
-                                    <input class="btn btn-primary" type="submit" value="Сохранить"
-                                           formaction="${pageContext.request.contextPath}/manager/add"/>
-                                    <input class="btn btn-primary" type="button"
-                                           onclick="location.href='${pageContext.request.contextPath}/manager'"
-                                           value="Новая"/>
-                                    <input class="btn btn-primary" type="submit"
-                                           formaction="${pageContext.request.contextPath}/manager/fix"
-                                           value="Выполнено"/>
-                                    <input class="btn btn-primary" type="button"
-                                           onclick="location.href='${pageContext.request.contextPath}/dashboard'"
-                                           value="Назад"/>
-                                </div>
+                            <div class="col-auto btn-group-lg">
+                                <input class="btn btn-primary" type="submit" value="Сохранить"
+                                       formaction="${pageContext.request.contextPath}/manager/add"/>
+                                <input class="btn btn-primary" type="button"
+                                       onclick="location.href='${pageContext.request.contextPath}/manager'"
+                                       value="Новая"/>
+                                <input class="btn btn-primary" type="submit"
+                                       formaction="${pageContext.request.contextPath}/manager/fix"
+                                       value="Выполнено"/>
+                                <input class="btn btn-primary" type="button"
+                                       onclick="location.href='${pageContext.request.contextPath}/dashboard'"
+                                       value="Назад"/>
                             </div>
+                        </div>
                     </form>
                 </div>
                 <div class="col-md-5 order-md-2 mb-4">
