@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 /**
  * В данном классе реализованы методы взаимодействия с сущностями проекта для взаимодействия с веб-формами интерфейса
@@ -38,6 +37,7 @@ public class MainController {
     final StatusRepository statusRepository;
     final JournalRepository journalRepository;
     final RoadCategoryRepository roadCategoryRepository;
+    final RoadRepository roadRepository;
     final SFixTermRepository sFixTermRepository;
     final RelatedFilesRepository relatedFilesRepository;
 
@@ -53,7 +53,7 @@ public class MainController {
                           StatusRepository statusRepository,
                           JournalRepository journalRepository,
                           RoadCategoryRepository roadCategoryRepository,
-                          SFixTermRepository sFixTermRepository,
+                          RoadRepository roadRepository, SFixTermRepository sFixTermRepository,
                           RelatedFilesRepository relatedFilesRepository) {
         this.srnRepository = srnRepository;
         this.departmentRepository = departmentRepository;
@@ -64,6 +64,7 @@ public class MainController {
         this.statusRepository = statusRepository;
         this.journalRepository = journalRepository;
         this.roadCategoryRepository = roadCategoryRepository;
+        this.roadRepository = roadRepository;
         this.sFixTermRepository = sFixTermRepository;
         this.relatedFilesRepository = relatedFilesRepository;
     }
