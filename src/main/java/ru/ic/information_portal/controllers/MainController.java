@@ -52,7 +52,9 @@ public class MainController {
                           MeasuresRepository measuresRepository,
                           StatusRepository statusRepository,
                           JournalRepository journalRepository,
-                          RoadCategoryRepository roadCategoryRepository, SFixTermRepository sFixTermRepository, RelatedFilesRepository relatedFilesRepository) {
+                          RoadCategoryRepository roadCategoryRepository,
+                          SFixTermRepository sFixTermRepository,
+                          RelatedFilesRepository relatedFilesRepository) {
         this.srnRepository = srnRepository;
         this.departmentRepository = departmentRepository;
         this.usersRepository = usersRepository;
@@ -170,10 +172,10 @@ public class MainController {
         return "manager";
     }
 
-    @PostMapping(path = "/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file,
-                             StreetRoadNetwork srn,
-                             Model model) throws IOException {
+    @PostMapping(path = "/upload_shortcoming")
+    public String uploadFileShortcoming(@RequestParam("file") MultipartFile file,
+                                        StreetRoadNetwork srn,
+                                        Model model) throws IOException {
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
@@ -181,12 +183,13 @@ public class MainController {
 
         if (file != null) {
 //            String uuid = UUID.randomUUID().toString();
-            String fileName = file.getOriginalFilename();
+            String fileName = srn.getId() + ".1." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
             file.transferTo(new File(uploadPath + "/" + fileName));
 
             RelatedFiles relatedFiles = new RelatedFiles();
             relatedFiles.setSrn(srn.getId());
-            relatedFiles.setFileName(srn.getId() + "." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + fileName);
+            relatedFiles.setType(1);
+            relatedFiles.setFileName(fileName);
             relatedFiles.setLoadDate(new Timestamp(new Date(new java.util.Date().getTime()).getTime()));
             User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             Users user = usersRepository.findByUsername(userAuth.getUsername());
@@ -200,6 +203,66 @@ public class MainController {
         return "manager";
     }
 
+    @PostMapping(path = "/upload_doc")
+    public String uploadFileDoc(@RequestParam("file") MultipartFile file,
+                                StreetRoadNetwork srn,
+                                Model model) throws IOException {
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+
+        if (file != null) {
+//            String uuid = UUID.randomUUID().toString();
+            String fileName = srn.getId() + ".2." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/" + fileName));
+
+            RelatedFiles relatedFiles = new RelatedFiles();
+            relatedFiles.setSrn(srn.getId());
+            relatedFiles.setType(2);
+            relatedFiles.setFileName(fileName);
+            relatedFiles.setLoadDate(new Timestamp(new Date(new java.util.Date().getTime()).getTime()));
+            User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Users user = usersRepository.findByUsername(userAuth.getUsername());
+            relatedFiles.setLoadUserName(user.getUsername());
+
+            relatedFilesRepository.save(relatedFiles);
+            model.addAttribute("srn", srnRepository.findById(srn.getId()));
+            model.addAttribute("data", getData(srn.getId()));
+        }
+
+        return "manager";
+    }
+
+    @PostMapping(path = "/upload_fix")
+    public String uploadFileFix(@RequestParam("file") MultipartFile file,
+                                StreetRoadNetwork srn,
+                                Model model) throws IOException {
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdir();
+        }
+
+        if (file != null) {
+            String fileName = srn.getId() + ".3." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
+            file.transferTo(new File(uploadPath + "/" + fileName));
+
+            RelatedFiles relatedFiles = new RelatedFiles();
+            relatedFiles.setSrn(srn.getId());
+            relatedFiles.setType(3);
+            relatedFiles.setFileName(fileName);
+            relatedFiles.setLoadDate(new Timestamp(new Date(new java.util.Date().getTime()).getTime()));
+            User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Users user = usersRepository.findByUsername(userAuth.getUsername());
+            relatedFiles.setLoadUserName(user.getUsername());
+
+            relatedFilesRepository.save(relatedFiles);
+            model.addAttribute("srn", srnRepository.findById(srn.getId()));
+            model.addAttribute("data", getData(srn.getId()));
+        }
+
+        return "manager";
+    }
 //    /**
 //     * Метод контроллера реализующий обновление записи об инциденте из веб-формы в баз данных, возвращает обновленную
 //     * запись из базы данных и записывает в аттрибуты для отображения в веб-форме
@@ -280,13 +343,15 @@ public class MainController {
 
         for (StreetRoadNetwork srn : allSrnByDepCode) {
             String color = "";
-            boolean endTerm = new Date(new java.util.Date().getTime()).getTime()
-                    - srn.getReferralDate().getTime()
-                    > (7 * 24 * 60 * 60 * 1000);
+//            boolean endTerm = new Date(new java.util.Date().getTime()).getTime()
+//                    - srn.getReferralDate().getTime()
+//                    > (7 * 24 * 60 * 60 * 1000);
 //                    > (sFixTermRepository.findByShortcomingIdAndRoadCategoryId(srn.getShortcoming().getId(), srn.getRoadCategory().getId()).getFixTerm());
-            if (srn.getFoundDate() != null) {
+            if (srn.getFoundDate() != null && srn.getReferralDate() != null) {
                 if (srn.getReferralDate() != null) {
-                    if (endTerm) {
+                    if (new Date(new java.util.Date().getTime()).getTime()
+                            - srn.getReferralDate().getTime()
+                            > (7 * 24 * 60 * 60 * 1000)) {
                         if (!srn.getStatus().isFixed()) {
                             color = "class=\"alert-danger\"";
                         } else color = "class=\"alert-warning\"";
@@ -294,7 +359,9 @@ public class MainController {
                         color = "class=\"alert-success\"";
                     }
                 } else {
-                    if (endTerm) {
+                    if (new Date(new java.util.Date().getTime()).getTime()
+                            - srn.getReferralDate().getTime()
+                            > (7 * 24 * 60 * 60 * 1000)) {
                         if (!srn.getStatus().isFixed()) {
                             color = "class=\"alert-danger\"";
                         } else color = "class=\"alert-warning\"";
@@ -306,7 +373,7 @@ public class MainController {
 
             stringBuilder.append("<tr ")
                     .append(color)
-                    .append("onclick=\"location.href='/srn/manager/get?id=")
+                    .append("onclick=\"location.href='/manager/get?id=")
                     .append(srn.getId())
                     .append("'\"")
                     .append("><td>")
@@ -434,7 +501,23 @@ public class MainController {
 
     private String getData(int srn_id) {
         StringBuilder sb = new StringBuilder();
-        for (RelatedFiles a : relatedFilesRepository.findAllBySrnOrderById(srn_id)) {
+        sb.append("<label>Недостаток</label>");
+
+        for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 1)) {
+            sb.append("<img src=\"../uploads/")
+                    .append(a.getFileName())
+                    .append("\" width=\"100%\">");
+        }
+        sb.append("<label>Документы</label>");
+
+        for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 2)) {
+            sb.append("<img src=\"../uploads/")
+                    .append(a.getFileName())
+                    .append("\" width=\"100%\">");
+        }
+        sb.append("<label>Результат</label>");
+
+        for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 3)) {
             sb.append("<img src=\"../uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");

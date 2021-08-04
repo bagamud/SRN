@@ -38,34 +38,34 @@
                     </a>
                 </div>
             </div>
-<%--            <div class="col d-flex align-items-start">--%>
-<%--                <div class="icon-square bg-light text-dark flex-shrink-0 me-3">--%>
-<%--                    <svg class="bi" width="1em" height="1em">--%>
-<%--                        <use xlink:href="#cpu-fill"/>--%>
-<%--                    </svg>--%>
-<%--                </div>--%>
-<%--                <div>--%>
-<%--                    <h2>Инструкции</h2>--%>
-<%--                    <p>В данном разделе размещены инструкции</p>--%>
-<%--                    <a href="#" class="btn btn-close">--%>
-<%--                        Перейти--%>
-<%--                    </a>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--            <div class="col d-flex align-items-start">--%>
-<%--                <div class="icon-square bg-light text-dark flex-shrink-0 me-3">--%>
-<%--                    <svg class="bi" width="1em" height="1em">--%>
-<%--                        <use xlink:href="#tools"/>--%>
-<%--                    </svg>--%>
-<%--                </div>--%>
-<%--                <div>--%>
-<%--                    <h2>Отчеты</h2>--%>
-<%--                    <p>Комплексные отчеты по линиям службы</p>--%>
-<%--                    <a href="#" class="btn btn-close">--%>
-<%--                        Перейти--%>
-<%--                    </a>--%>
-<%--                </div>--%>
-<%--            </div>--%>
+            <%--            <div class="col d-flex align-items-start">--%>
+            <%--                <div class="icon-square bg-light text-dark flex-shrink-0 me-3">--%>
+            <%--                    <svg class="bi" width="1em" height="1em">--%>
+            <%--                        <use xlink:href="#cpu-fill"/>--%>
+            <%--                    </svg>--%>
+            <%--                </div>--%>
+            <%--                <div>--%>
+            <%--                    <h2>Инструкции</h2>--%>
+            <%--                    <p>В данном разделе размещены инструкции</p>--%>
+            <%--                    <a href="#" class="btn btn-close">--%>
+            <%--                        Перейти--%>
+            <%--                    </a>--%>
+            <%--                </div>--%>
+            <%--            </div>--%>
+            <%--            <div class="col d-flex align-items-start">--%>
+            <%--                <div class="icon-square bg-light text-dark flex-shrink-0 me-3">--%>
+            <%--                    <svg class="bi" width="1em" height="1em">--%>
+            <%--                        <use xlink:href="#tools"/>--%>
+            <%--                    </svg>--%>
+            <%--                </div>--%>
+            <%--                <div>--%>
+            <%--                    <h2>Отчеты</h2>--%>
+            <%--                    <p>Комплексные отчеты по линиям службы</p>--%>
+            <%--                    <a href="#" class="btn btn-close">--%>
+            <%--                        Перейти--%>
+            <%--                    </a>--%>
+            <%--                </div>--%>
+            <%--            </div>--%>
         </div>
     </div>
 

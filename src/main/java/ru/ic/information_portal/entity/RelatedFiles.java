@@ -12,6 +12,7 @@ public class RelatedFiles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int srn;
+    private int type;
     private String fileName;
     private String loadUserName;
 
@@ -31,6 +32,14 @@ public class RelatedFiles {
 
     public void setSrn(int srn) {
         this.srn = srn;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public String getFileName() {

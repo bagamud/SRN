@@ -199,7 +199,26 @@
                             ${data}
                         </div>
                         <div class="card-footer">
-                            <form action="${pageContext.request.contextPath}/upload" method="post"
+                            <label>Недостаток</label>
+                            <form action="${pageContext.request.contextPath}/upload_shortcoming" method="post"
+                                  enctype="multipart/form-data">
+                                <input type="file" class="" name="file">
+                                <input type="hidden" name="id" value="${srn.id}">
+                                <input type="submit" class="float-lg-right" value="Загрузить">
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <label>Документы</label>
+                            <form action="${pageContext.request.contextPath}/upload_doc" method="post"
+                                  enctype="multipart/form-data">
+                                <input type="file" class="" name="file">
+                                <input type="hidden" name="id" value="${srn.id}">
+                                <input type="submit" class="float-lg-right" value="Загрузить">
+                            </form>
+                        </div>
+                        <div class="card-footer">
+                            <label>Результат</label>
+                            <form action="${pageContext.request.contextPath}/upload_fix" method="post"
                                   enctype="multipart/form-data">
                                 <input type="file" class="" name="file">
                                 <input type="hidden" name="id" value="${srn.id}">

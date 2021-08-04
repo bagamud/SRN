@@ -4,5 +4,5 @@ import org.springframework.data.repository.CrudRepository;
 import ru.ic.information_portal.entity.RelatedFiles;
 
 public interface RelatedFilesRepository extends CrudRepository<RelatedFiles, Integer> {
-    Iterable<RelatedFiles> findAllBySrnOrderById(int srn_id);
+    Iterable<RelatedFiles> findAllBySrnAndTypeOrderById(int srn_id, int type);
 }
