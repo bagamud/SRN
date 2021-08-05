@@ -70,15 +70,15 @@
                                 <div class="col-md-3 mb-3">
                                     <label for="status">Статус</label>
                                     <select class="form-control custom-select d-block w-100" id="status"
-                                            name="status" disabled>
+                                        ${form_disable}>
                                         <option value="${srn.status.id}">${srn.status.title}</option>
                                         ${status}
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="control">Контроль</label>
-                                    <input type="text" class="form-control" id="control" value="${srn.control}"
-                                            <%if (request.getAttribute("user") != null) out.print("disabled");%>/>
+                                    <input type="text" class="form-control" id="control" name="control" value="${srn.control}"
+                                    ${form_disable}/>
                                 </div>
 
                             </div>
@@ -87,7 +87,8 @@
                                     <label for="department">Подразделение</label>
                                     <select class="form-control custom-select d-block w-100"
                                             id="department"
-                                            name="department" required>
+                                            name="department"
+                                            ${form_disable}>
                                         <option value="${srn.department.id}">${srn.department.title}</option>
                                         ${departments}
                                     </select>
@@ -279,11 +280,16 @@
         </main>
     </div>
 </div>
-<%--<script>--%>
-<%--    document.getElementById('department').value = ${user.department.id};--%>
-<%--    let depCode = ${user.department.code};--%>
-<%--    document.getElementById('department').disabled = (depCode !== 1140000);--%>
-<%--</script>--%>
+<script>
+    let control = document.getElementById('control').value;
+    if (control !== null && control !== '') {
+        document.getElementById('control').style.backgroundColor = 'red';
+    }
+
+    <%--document.getElementById('department').value = ${user.department.id};--%>
+    <%--let depCode = ${user.department.code};--%>
+    <%--document.getElementById('department').disabled = (depCode !== 1140000);--%>
+</script>
 <jsp:include page="../template/_footer.jsp"/>
 </body>
 </html>
