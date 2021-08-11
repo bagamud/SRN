@@ -24,7 +24,7 @@
             <li class="nav-item active">
                 <a class="navbar-brand" id="principal">${user.name}</a>
             </li>
-srn/
+            srn/
             <li class="nav-item">
                 <button class="navbar-brand btn-lg btn-primary"
                         onclick="location.href='${pageContext.request.contextPath}/logout'">

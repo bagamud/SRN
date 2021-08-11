@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ic.information_portal.entity.*;
-//import ru.ic.information_portal.reports.FormRequest;
 import ru.ic.information_portal.reports.ResponseFactory;
 import ru.ic.information_portal.repositories.*;
 
@@ -388,7 +387,6 @@ public class MainController {
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-
 
 
             stringBuilder.append("<tr ")
