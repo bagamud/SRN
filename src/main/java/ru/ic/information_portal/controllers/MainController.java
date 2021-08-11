@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ic.information_portal.entity.*;
-import ru.ic.information_portal.reports.FormRequest;
+//import ru.ic.information_portal.reports.FormRequest;
 import ru.ic.information_portal.reports.ResponseFactory;
 import ru.ic.information_portal.repositories.*;
 
@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 /**
  * В данном классе реализованы методы взаимодействия с сущностями проекта для взаимодействия с веб-формами интерфейса
@@ -187,13 +186,12 @@ public class MainController {
     public String uploadFileShortcoming(@RequestParam("file") MultipartFile file,
                                         StreetRoadNetwork srn,
                                         Model model) throws IOException {
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
+//        File uploadDir = new File(uploadPath);
+//        if (!uploadDir.exists()) {
+//            uploadDir.mkdir();
+//        }
 
         if (file != null) {
-//            String uuid = UUID.randomUUID().toString();
             String fileName = srn.getId() + ".1." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
             file.transferTo(new File(uploadPath + "/" + fileName));
 
@@ -218,13 +216,12 @@ public class MainController {
     public String uploadFileDoc(@RequestParam("file") MultipartFile file,
                                 StreetRoadNetwork srn,
                                 Model model) throws IOException {
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir. exists()) {
-            uploadDir.mkdir();
-        }
+//        File uploadDir = new File(uploadPath);
+//        if (!uploadDir. exists()) {
+//            uploadDir.mkdir();
+//        }
 
         if (file != null) {
-//            String uuid = UUID.randomUUID().toString();
             String fileName = srn.getId() + ".2." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
             file.transferTo(new File(uploadPath + "/" + fileName));
 
@@ -249,10 +246,10 @@ public class MainController {
     public String uploadFileFix(@RequestParam("file") MultipartFile file,
                                 StreetRoadNetwork srn,
                                 Model model) throws IOException {
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdir();
-        }
+//        File uploadDir = new File(uploadPath);
+//        if (!uploadDir.exists()) {
+//            uploadDir.mkdir();
+//        }
 
         if (file != null) {
             String fileName = srn.getId() + ".3." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
@@ -441,7 +438,7 @@ public class MainController {
      */
 
     @GetMapping(path = "/reports")
-    public String reports(FormRequest formRequest, Model model) {
+    public String reports(/*FormRequest formRequest,*/ Model model) {
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
