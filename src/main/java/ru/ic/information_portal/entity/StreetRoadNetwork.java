@@ -45,6 +45,7 @@ public class StreetRoadNetwork {
     private Date closeDate;
     private String measuresIfNot;
     private String control;
+    private String controller;
 
     public int getId() {
         return id;
@@ -206,5 +207,13 @@ public class StreetRoadNetwork {
 
     public void setControl(String control) {
         this.control = control;
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
     }
 }

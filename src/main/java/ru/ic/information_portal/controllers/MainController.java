@@ -170,6 +170,9 @@ public class MainController {
             if (srn.getDepartment() == null) {
                 srn.setDepartment(user.getDepartment());
             }
+            if (!srn.getControl().equals("")) {
+                srn.setController(user.getName());
+            }
 
             model.addAttribute("srn", srnRepository.save(srn));
             journaling(srn);
