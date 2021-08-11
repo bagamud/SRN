@@ -79,10 +79,11 @@ public class MainController {
 
     @GetMapping(path = "/manager")
     public String manager(Model model) {
-        getVocabulary(model);
+
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
+        getVocabulary(model, user);
         model.addAttribute("user", user);
 
         return "manager";
@@ -99,13 +100,13 @@ public class MainController {
 
     @GetMapping(path = "/manager/get")
     public String getSrn(@RequestParam(defaultValue = "0") int id, Model model) {
-        getVocabulary(model);
+
         model.addAttribute("data", getData(id));
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
-
+        getVocabulary(model, user);
         try {
             StreetRoadNetwork srn = srnRepository.findById(id);
             if ((user.getDepartment().getCode() == 1140000) || srn.getDepartment().getCode() == user.getDepartment().getCode()) {
@@ -133,12 +134,12 @@ public class MainController {
 
     @PostMapping(path = "/manager/add")
     public String addSrn(StreetRoadNetwork srn, BindingResult bindingResult, Model model) {
-        getVocabulary(model);
         model.addAttribute("data", getData(srn.getId()));
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
+        getVocabulary(model, user);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
@@ -150,10 +151,17 @@ public class MainController {
             } else srn.setCreateDate(srnRepository.findById(srn.getId()).getCreateDate());
 
             if (srn.getStatus() == null) {
-                srn.setStatus(statusRepository.findById(1));
-            } else if (srn.getReferralDate() != null && !srn.getStatus().isFixed()) {
-                srn.setStatus(statusRepository.findById(2));
+                if (srn.getId() == 0) {
+                    srn.setStatus(this.statusRepository.findById(1));
+                } else {
+                    srn.setStatus(this.srnRepository.findById(srn.getId()).getStatus());
+                }
             }
+
+            if (srn.getReferralDate() != null && !srn.getStatus().isFixed()) {
+                srn.setStatus(this.statusRepository.findById(2));
+            }
+
 
             if (srn.getStatus().isFixed()) {
                 srn.setCloseDate(new Date(new java.util.Date().getTime()));
@@ -208,7 +216,7 @@ public class MainController {
                                 StreetRoadNetwork srn,
                                 Model model) throws IOException {
         File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
+        if (!uploadDir. exists()) {
             uploadDir.mkdir();
         }
 
@@ -292,11 +300,11 @@ public class MainController {
 //
     @PostMapping(path = "/manager/fix")
     public String fixSrn(@RequestParam int id, Model model) {
-        getVocabulary(model);
         model.addAttribute("data", getData(id));
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
+        getVocabulary(model, user);
 
         StreetRoadNetwork srn = srnRepository.findById(id);
 
@@ -323,11 +331,11 @@ public class MainController {
 
     @GetMapping(path = "/dashboard")
     public String dashboard(Model model) {
-        getVocabulary(model);
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
+        getVocabulary(model, user);
 
         int depCode = 0;
         if (user != null) {
@@ -371,6 +379,18 @@ public class MainController {
 //                }
 //            }
 
+            String control = "";
+
+            try {
+                if (!srn.getControl().equals("") && srn.getControl() != null) {
+                    control = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\" style=\"color: red\" class=\"bi bi-exclamation-circle-fill text-alert\" viewBox=\"0 0 16 16\">\n  <path d=\"M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z\"/>\n</svg>";
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+
+
             stringBuilder.append("<tr ")
                     .append(color)
                     .append("onclick=\"location.href='/srn/manager/get?id=")
@@ -379,6 +399,8 @@ public class MainController {
                     .append("><td>")
                     .append(srn.getId())
                     .append("</td><td>")
+//                    .append("")
+//                    .append("</td><td>")
                     .append(srn.getDepartment().getTitle())
                     .append("</td><td>")
                     .append(srn.getFoundWho())
@@ -399,6 +421,8 @@ public class MainController {
 //                    .append("</td><td>")
 //                    .append(srn.getMeasuresDate())
                     .append(srn.getStatus().getTitle())
+                    .append("</td><td>")
+                    .append(control)
                     .append("</td></tr>");
         }
         model.addAttribute("srnAllsb", stringBuilder.toString());
@@ -415,11 +439,11 @@ public class MainController {
 
     @GetMapping(path = "/reports")
     public String reports(FormRequest formRequest, Model model) {
-        getVocabulary(model);
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
+        getVocabulary(model, user);
 
         ResponseFactory res = new ResponseFactory(srnRepository, departmentRepository);
         model.addAttribute("report", res.toHTML(res.generateBaseReport()));
@@ -427,7 +451,7 @@ public class MainController {
         return "reports";
     }
 
-    private void getVocabulary(Model model) {
+    private void getVocabulary(Model model, Users user) {
 
         StringBuilder sb = new StringBuilder();
         for (Shortcoming shortcoming : shortcomingRepository.findAll()) {
@@ -497,28 +521,35 @@ public class MainController {
         }
         String roadCategory = sb.toString();
         model.addAttribute("roadCategories", roadCategory);
+
+        if (user.getDepartment().getCode() != 1140000) {
+            model.addAttribute("form_disable", "disabled");
+//            model.addAttribute("form_control", "bg-danger");
+            model.addAttribute("form_hidden", "hidden");
+        }
+
     }
 
     private String getData(int srn_id) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<label>Недостаток</label><hr class=\"mb-5\">");
+        sb.append("<label>Недостаток</label><hr class=\"mb\">");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 1)) {
-            sb.append("<img src=\"../uploads/")
+            sb.append("<img src=\"/srnFiles/uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }
-        sb.append("<label>Документы</label><hr class=\"mb-5\">");
+        sb.append("<label>Документы</label><hr class=\"mb\">");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 2)) {
-            sb.append("<img src=\"/uploads/")
+            sb.append("<img src=\"/srnFiles/uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }
-        sb.append("<label>Результат</label><hr class=\"mb-5\">");
+        sb.append("<label>Результат</label>");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 3)) {
-            sb.append("<img src=\"../uploads/")
+            sb.append("<img src=\"/srnFiles/uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }

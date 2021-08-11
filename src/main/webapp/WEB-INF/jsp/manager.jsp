@@ -32,7 +32,6 @@
                 <div class="col-md-7 order-md-1">
                     <form class="needs-validation" action="${pageContext.request.contextPath}/manager" method="post"
                           name="form" id="formId">
-                        <fieldset class="">
                             <legend>Раздел 1
                             </legend>
                             <div class="row">
@@ -70,15 +69,15 @@
                                 <div class="col-md-3 mb-3">
                                     <label for="status">Статус</label>
                                     <select class="form-control custom-select d-block w-100" id="status"
-                                            name="status" disabled>
+                                            name="status" ${form_disable}>
                                         <option value="${srn.status.id}">${srn.status.title}</option>
                                         ${status}
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="control">Контроль</label>
-                                    <input type="text" class="form-control" id="control" value="${srn.control}"
-                                            <%if (request.getAttribute("user") != null) out.print("disabled");%>/>
+                                    <input type="text" class="form-control" id="control" name="control" value="${srn.control}"
+                                        ${form_disable}/>
                                 </div>
 
                             </div>
@@ -87,7 +86,7 @@
                                     <label for="department">Подразделение</label>
                                     <select class="form-control custom-select d-block w-100"
                                             id="department"
-                                            name="department" required>
+                                            name="department" ${form_disable}>
                                         <option value="${srn.department.id}">${srn.department.title}</option>
                                         ${departments}
                                     </select>
@@ -155,24 +154,23 @@
                                            placeholder="результат и единицы измерения"
                                            value="${srn.comment}">
                                 </div>
+                            </div>                            <div class="row">
+
+
+                            <div class="col-md-8 mb-3">
+                                <label for="sendTo">Кому передано</label>
+                                <input class="form-control" id="sendTo" name="sendTo"
+                                       value="${srn.sendTo}">
                             </div>
-                        </fieldset>
-                        <fieldset class="">
+                            <div class="col-md-4 mb-3">
+                                <label for="referralDate">Дата передачи</label>
+                                <input class="form-control" id="referralDate" type="date" name="referralDate"
+                                       value="${srn.referralDate.toLocalDate()}">
+                            </div>
+                        </div>
+
                             <legend>Раздел 2
                             </legend>
-                            <div class="row">
-
-                                <div class="col-md-8 mb-3">
-                                    <label for="sendTo">Кому передано</label>
-                                    <input class="form-control" id="sendTo" name="sendTo"
-                                           value="${srn.sendTo}">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="referralDate">Дата передачи</label>
-                                    <input class="form-control" id="referralDate" type="date" name="referralDate"
-                                           value="${srn.referralDate.toLocalDate()}">
-                                </div>
-                            </div>
                             <%--                            <hr class="mb-3">--%>
 
                             <div class="row">
@@ -196,8 +194,7 @@
                                            value="${srn.measuresDate.toLocalDate()}">
                                 </div>
                             </div>
-                            <%--                            <hr class="mb-5">                  --%>
-                        </fieldset>
+                                                        <hr class="mb-5">
 
                         <div class="row">
                             <div class="col-auto btn-group-lg">
@@ -279,11 +276,12 @@
         </main>
     </div>
 </div>
-<%--<script>--%>
-<%--    document.getElementById('department').value = ${user.department.id};--%>
-<%--    let depCode = ${user.department.code};--%>
-<%--    document.getElementById('department').disabled = (depCode !== 1140000);--%>
-<%--</script>--%>
+<script>
+    let control = document.getElementById('control').value;
+    if (control !== null && control !== '') {
+        document.getElementById('control').style.backgroundColor = 'red';
+    }
+</script>
 <jsp:include page="../template/_footer.jsp"/>
 </body>
 </html>
