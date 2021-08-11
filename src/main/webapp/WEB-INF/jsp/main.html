@@ -1,23 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap core CSS -->
-    <link href="../webjars/bootstrap/5.0.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/srn/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Favicons -->
-    <link href="../../img/favicons/favicon.ico" rel="icon">
-    <title>Информационный портал УГИБДД</title>
+    <link rel="icon" href="/srn/img/favicons/favicon.ico">    <title>Информационный портал УГИБДД</title>
+    <link href="/srn/css/features.css" rel="stylesheet">
 </head>
 <body class="text-center">
-<form action="http://localhost:8081/dashboard" class="container-xl">
-    <img alt="" class="mb-4" src="../../img/gibdd.png">
-    <h1>Журнал учета недостатков улично-дорожной сети</h1>
-    <button class="btn btn-lg btn-primary" type="submit">Войти</button>
-</form>
+<main>
+
+    <div class="container">
+        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+            <a href="/"
+               class="d-flex align-items-center justify-content-center mb-3 mb-md-0 text-dark text-decoration-none">
+                <svg class="bi me-2" width="40" height="32">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+                <span class="fs-4">Информационный портал УГИБДД</span>
+            </a>
+
+        </header>
+    </div>
+    <div class="b-example-divider"></div>
+
+    <div class="container px-4 py-5" id="hanging-icons">
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="col d-flex align-items-start">
+                <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
+                    <img src="/srn/img/1.25.png" width="95%"/>
+                </div>
+                <div>
+                    <h2>Журнал учета недостатков УДС</h2>
+                    <p>В данном журнале очуществляется формирование и работа
+                        с записями о выявленных недостатках в содержании улично-дорожной сети
+                    </p>
+                    <a href="/srn/dashboard" class="btn btn-primary">
+                        Перейти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="b-example-divider"></div>
+
+</main>
+
+<script src="/srn/webjars/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

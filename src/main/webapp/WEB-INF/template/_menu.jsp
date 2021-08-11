@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand nav-link mr-lg-auto" href="${pageContext.request.contextPath}/">
+    <a class="navbar-brand nav-link mr-lg-auto" href="/">
         <img alt="Russian Federation"
              height="30"
              src="${pageContext.request.contextPath}/img/mvd.png"
@@ -24,7 +24,7 @@
             <li class="nav-item active">
                 <a class="navbar-brand" id="principal">${user.name}</a>
             </li>
-
+srn/
             <li class="nav-item">
                 <button class="navbar-brand btn-lg btn-primary"
                         onclick="location.href='${pageContext.request.contextPath}/logout'">

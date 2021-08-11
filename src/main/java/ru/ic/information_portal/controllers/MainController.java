@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 /**
  * В данном классе реализованы методы взаимодействия с сущностями проекта для взаимодействия с веб-формами интерфейса
@@ -37,7 +38,6 @@ public class MainController {
     final StatusRepository statusRepository;
     final JournalRepository journalRepository;
     final RoadCategoryRepository roadCategoryRepository;
-    final RoadRepository roadRepository;
     final SFixTermRepository sFixTermRepository;
     final RelatedFilesRepository relatedFilesRepository;
 
@@ -53,7 +53,7 @@ public class MainController {
                           StatusRepository statusRepository,
                           JournalRepository journalRepository,
                           RoadCategoryRepository roadCategoryRepository,
-                          RoadRepository roadRepository, SFixTermRepository sFixTermRepository,
+                          SFixTermRepository sFixTermRepository,
                           RelatedFilesRepository relatedFilesRepository) {
         this.srnRepository = srnRepository;
         this.departmentRepository = departmentRepository;
@@ -64,7 +64,6 @@ public class MainController {
         this.statusRepository = statusRepository;
         this.journalRepository = journalRepository;
         this.roadCategoryRepository = roadCategoryRepository;
-        this.roadRepository = roadRepository;
         this.sFixTermRepository = sFixTermRepository;
         this.relatedFilesRepository = relatedFilesRepository;
     }
@@ -80,21 +79,12 @@ public class MainController {
 
     @GetMapping(path = "/manager")
     public String manager(Model model) {
-
+        getVocabulary(model);
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
-        getVocabulary(model, user);
+        model.addAttribute("user", user);
 
-
-//        model.addAttribute("user", user);
-//
-//        if (user.getDepartment().getCode() != 1) {
-//            model.addAttribute("form.disable", "disabled");
-//            model.addAttribute("form.control", "bg-danger");
-//            model.addAttribute("form.hidden", "hidden");
-//
-//        }
         return "manager";
     }
 
@@ -109,12 +99,12 @@ public class MainController {
 
     @GetMapping(path = "/manager/get")
     public String getSrn(@RequestParam(defaultValue = "0") int id, Model model) {
-
+        getVocabulary(model);
         model.addAttribute("data", getData(id));
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
-        getVocabulary(model, user);
+        model.addAttribute("user", user);
 
         try {
             StreetRoadNetwork srn = srnRepository.findById(id);
@@ -143,20 +133,12 @@ public class MainController {
 
     @PostMapping(path = "/manager/add")
     public String addSrn(StreetRoadNetwork srn, BindingResult bindingResult, Model model) {
-
+        getVocabulary(model);
         model.addAttribute("data", getData(srn.getId()));
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
-        getVocabulary(model, user);
-
-//        model.addAttribute("user", user);
-//        if (user.getDepartment().getCode() != 1) {
-//            model.addAttribute("form.disable", "disabled");
-//            model.addAttribute("form.control", "bg-danger");
-//            model.addAttribute("form.hidden", "hidden");
-//
-//        }
+        model.addAttribute("user", user);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("errors", bindingResult.getAllErrors());
@@ -310,18 +292,11 @@ public class MainController {
 //
     @PostMapping(path = "/manager/fix")
     public String fixSrn(@RequestParam int id, Model model) {
-
+        getVocabulary(model);
         model.addAttribute("data", getData(id));
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
-        getVocabulary(model, user);
-//        model.addAttribute("user", user);
-//        if (user.getDepartment().getCode() != 1) {
-//            model.addAttribute("form.disable", "disabled");
-//            model.addAttribute("form.control", "bg-danger");
-//            model.addAttribute("form.hidden", "hidden");
-//
-//        }
+        model.addAttribute("user", user);
 
         StreetRoadNetwork srn = srnRepository.findById(id);
 
@@ -348,18 +323,11 @@ public class MainController {
 
     @GetMapping(path = "/dashboard")
     public String dashboard(Model model) {
-
+        getVocabulary(model);
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
-        getVocabulary(model, user);
-//        model.addAttribute("user", user);
-//        if (user.getDepartment().getCode() != 1) {
-//            model.addAttribute("form.disable", "disabled");
-//            model.addAttribute("form.control", "bg-danger");
-//            model.addAttribute("form.hidden", "hidden");
-//
-//        }
+        model.addAttribute("user", user);
 
         int depCode = 0;
         if (user != null) {
@@ -379,57 +347,37 @@ public class MainController {
 //                    - srn.getReferralDate().getTime()
 //                    > (7 * 24 * 60 * 60 * 1000);
 //                    > (sFixTermRepository.findByShortcomingIdAndRoadCategoryId(srn.getShortcoming().getId(), srn.getRoadCategory().getId()).getFixTerm());
-            if (srn.getFoundDate() != null && srn.getReferralDate() != null) {
-                if (srn.getReferralDate() != null) {
-                    if (new Date(new java.util.Date().getTime()).getTime()
-                            - srn.getReferralDate().getTime()
-                            > (7 * 24 * 60 * 60 * 1000)) {
-                        if (!srn.getStatus().isFixed()) {
-                            color = "class=\"alert-danger\"";
-                        } else color = "class=\"alert-warning\"";
-                    } else if (srn.getStatus().isFixed()) {
-                        color = "class=\"alert-success\"";
-                    }
-                } else {
-                    if (new Date(new java.util.Date().getTime()).getTime()
-                            - srn.getFoundDate().getTime()
-                            > (7 * 24 * 60 * 60 * 1000)) {
-                        if (!srn.getStatus().isFixed()) {
-                            color = "class=\"alert-danger\"";
-                        } else color = "class=\"alert-warning\"";
-                    } else if (srn.getStatus().isFixed()) {
-                        color = "class=\"alert-success\"";
-                    }
-                }
-            }
+//            if (srn.getFoundDate() != null && srn.getReferralDate() != null) {
+//                if (srn.getReferralDate() != null) {
+//                    if (new Date(new java.util.Date().getTime()).getTime()
+//                            - srn.getReferralDate().getTime()
+//                            > (7 * 24 * 60 * 60 * 1000)) {
+//                        if (!srn.getStatus().isFixed()) {
+//                            color = "class=\"alert-danger\"";
+//                        } else color = "class=\"alert-warning\"";
+//                    } else if (srn.getStatus().isFixed()) {
+//                        color = "class=\"alert-success\"";
+//                    }
+//                } else {
+//                    if (new Date(new java.util.Date().getTime()).getTime()
+//                            - srn.getReferralDate().getTime()
+//                            > (7 * 24 * 60 * 60 * 1000)) {
+//                        if (!srn.getStatus().isFixed()) {
+//                            color = "class=\"alert-danger\"";
+//                        } else color = "class=\"alert-warning\"";
+//                    } else if (srn.getStatus().isFixed()) {
+//                        color = "class=\"alert-success\"";
+//                    }
+//                }
+//            }
 
-            String miniature = "";
-            try {
-                miniature = relatedFilesRepository.findFirstBySrnAndType(srn.getId(), 1).getFileName();
-            } catch (NullPointerException e) {
-                miniature = "placeholder.png";
-            }
-            String control = "";
-            try {
-                if (!srn.getControl().equals("") && srn.getControl() != null) {
-                    control = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\" style=\"color: red\" class=\"bi bi-exclamation-circle-fill text-alert\" viewBox=\"0 0 16 16\">\n" +
-                            "  <path d=\"M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z\"/>\n" +
-                            "</svg>";
-                }
-            } catch (NullPointerException e) {
-
-            }
             stringBuilder.append("<tr ")
                     .append(color)
-                    .append("onclick=\"location.href='/manager/get?id=")
+                    .append("onclick=\"location.href='/srn/manager/get?id=")
                     .append(srn.getId())
                     .append("'\"")
                     .append("><td>")
                     .append(srn.getId())
-                    .append("</td><td>")
-                    .append("<img src=\"../uploads/")
-                    .append(miniature)
-                    .append("\" width=\"100\">")
                     .append("</td><td>")
                     .append(srn.getDepartment().getTitle())
                     .append("</td><td>")
@@ -451,8 +399,6 @@ public class MainController {
 //                    .append("</td><td>")
 //                    .append(srn.getMeasuresDate())
                     .append(srn.getStatus().getTitle())
-                    .append("</td><td class=\"text-center\">")
-                    .append(control)
                     .append("</td></tr>");
         }
         model.addAttribute("srnAllsb", stringBuilder.toString());
@@ -469,10 +415,11 @@ public class MainController {
 
     @GetMapping(path = "/reports")
     public String reports(FormRequest formRequest, Model model) {
+        getVocabulary(model);
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
-        getVocabulary(model, user);
+        model.addAttribute("user", user);
 
         ResponseFactory res = new ResponseFactory(srnRepository, departmentRepository);
         model.addAttribute("report", res.toHTML(res.generateBaseReport()));
@@ -480,7 +427,7 @@ public class MainController {
         return "reports";
     }
 
-    private void getVocabulary(Model model, Users user) {
+    private void getVocabulary(Model model) {
 
         StringBuilder sb = new StringBuilder();
         for (Shortcoming shortcoming : shortcomingRepository.findAll()) {
@@ -550,34 +497,25 @@ public class MainController {
         }
         String roadCategory = sb.toString();
         model.addAttribute("roadCategories", roadCategory);
-
-        model.addAttribute("user", user);
-
-        if (user.getDepartment().getCode() != 1140000) {
-            model.addAttribute("form_disable", "disabled");
-            model.addAttribute("form_control", "bg-danger");
-            model.addAttribute("form_hidden", "hidden");
-
-        }
     }
 
     private String getData(int srn_id) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<label>Недостаток</label>");
+        sb.append("<label>Недостаток</label><hr class=\"mb-5\">");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 1)) {
             sb.append("<img src=\"../uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }
-        sb.append("<hr class=\"mb-3\"><label>Документы</label>");
+        sb.append("<label>Документы</label><hr class=\"mb-5\">");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 2)) {
-            sb.append("<img src=\"../uploads/")
+            sb.append("<img src=\"/uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }
-        sb.append("<hr class=\"mb-3\"><label>Результат</label>");
+        sb.append("<label>Результат</label><hr class=\"mb-5\">");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 3)) {
             sb.append("<img src=\"../uploads/")
@@ -586,7 +524,6 @@ public class MainController {
         }
 
         return sb.toString();
-
     }
 
     public void journaling(StreetRoadNetwork srn) throws IOException {

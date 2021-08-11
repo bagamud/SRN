@@ -26,7 +26,7 @@
         <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
             <div class="col d-flex align-items-start">
                 <div class="icon-square bg-light text-dark flex-shrink-0 me-3">
-                    <img src="../img/1.25.png" width="95%"/>
+                    <img src="${pageContext.request.contextPath}/img/1.25.png" width="95%"/>
                 </div>
                 <div>
                     <h2>Журнал учета недостатков УДС</h2>
