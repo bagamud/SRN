@@ -16,7 +16,7 @@
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
-                    <tr>
+                    <tr class="text-center">
                         <th>Номер</th>
                         <%--                        <th>Недостаток</th>--%>
                         <th>Подразделение</th>

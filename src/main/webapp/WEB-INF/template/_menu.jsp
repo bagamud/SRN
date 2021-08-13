@@ -1,32 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand nav-link mr-lg-auto" href="/">
-        <img alt="Russian Federation"
-             height="30"
-             src="${pageContext.request.contextPath}/img/mvd.png"
-             style="margin-left: 10px"
-             width="52"/>
-    </a>
-    <div class="navbar-collapse">
-        <ul class="navbar-nav col-md-9">
-            <li class="nav-item active">
-                <a class="navbar-brand" href="${pageContext.request.contextPath}/dashboard">Журнал</a>
-            </li>
-            <li class="nav-item active">
-                <a class="navbar-brand" href="${pageContext.request.contextPath}/manager">Карточка</a>
-            </li>
-            <li class="nav-item active">
-                <a class="navbar-brand" href="${pageContext.request.contextPath}/reports">Отчеты</a>
-            </li>
-        </ul>
-        <ul class="navbar-nav col-md-3">
-            <li class="nav-item active">
-                <a class="navbar-brand" id="principal">${user.name}</a>
-            </li>
-            srn/
-            <li class="nav-item">
-                <button class="navbar-brand btn-lg btn-primary"
+<header class="p-1 bg-dark">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none" href="/">
+                <img alt="Russian Federation"
+                     height="30"
+                     src="${pageContext.request.contextPath}/img/mvd.png"
+                     style="margin-left: 10px"
+                     width="52"/>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li>
+                    <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/dashboard">Журнал</a>
+                </li>
+                <li>
+                    <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/manager">Карточка</a>
+                </li>
+                <li>
+                    <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/reports">Отчеты</a>
+                </li>
+            </ul>
+
+            <label class="nav-link px-2 text-white" id="principal">${user.name}</label>
+
+            <div class="text-end">
+                <button class="btn btn-outline-light"
                         onclick="location.href='${pageContext.request.contextPath}/logout'">
                     <svg class="bi bi-power" fill="currentColor" height="1em" viewBox="0 0 16 16" width="1em"
                          xmlns="http://www.w3.org/2000/svg">
@@ -35,9 +35,7 @@
                         <path d="M7.5 8V1h1v7h-1z" fill-rule="evenodd"></path>
                     </svg>
                 </button>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
-</nav>
-
-
+</header>

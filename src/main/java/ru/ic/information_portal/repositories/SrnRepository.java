@@ -10,6 +10,10 @@ public interface SrnRepository extends CrudRepository<StreetRoadNetwork, Integer
 
     Iterable<StreetRoadNetwork> findAllByDepartment_CodeOrderById(int code);
 
+    Iterable<StreetRoadNetwork> findAllByCreateDateAfterOrderById(Date createDate);
+
+    Iterable<StreetRoadNetwork> findAllByDepartment_CodeAndCreateDateAfterOrderById(int code, Date createDate);
+
     long countByStatus_Fixed(boolean fixed);
 
     long countByDepartment_RegCode(int regCode);

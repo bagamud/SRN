@@ -32,8 +32,7 @@
                 <div class="col-md-7 order-md-1">
                     <form class="needs-validation" action="${pageContext.request.contextPath}/manager" method="post"
                           name="form" id="formId">
-                        <legend>Раздел 1
-                        </legend>
+                        <h5>Раздел 1</h5>
                         <div class="row">
                             <div class=" col-md-3 mb-3">
                                 <label for="id">Номер</label>
@@ -75,7 +74,7 @@
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="control">Контроль</label>
+                                <label for="control">Контроль: ${srn.controller}</label>
                                 <input type="text" class="form-control" id="control" name="control"
                                        value="${srn.control}"
                                 ${form_disable}/>
@@ -87,7 +86,8 @@
                                 <label for="department">Подразделение</label>
                                 <select class="form-control custom-select d-block w-100"
                                         id="department"
-                                        name="department" ${form_disable}>
+                                        name="department"
+                                ${form_disable}>
                                     <option value="${srn.department.id}">${srn.department.title}</option>
                                     ${departments}
                                 </select>
@@ -95,105 +95,138 @@
 
                             <div class="col-md-5 mb-3">
                                 <label for="foundWho">Кем выявлено</label>
-                                <input class="form-control" id="foundWho"
-                                       required
-                                       type="text" name="foundWho"
-                                       placeholder="ИДПС Иванов И.И."
-                                       value="${srn.foundWho}">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon1">1</span>
+                                    <input class="form-control" id="foundWho"
+                                           required
+                                           type="text" name="foundWho"
+                                           placeholder="ИДПС Иванов И.И."
+                                           title="${srn.foundWho}"
+                                           value="${srn.foundWho}">
+                                </div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="foundDate">Дата выявления</label>
-                                <input class="form-control" id="foundDate" type="date" name="foundDate"
-                                       value="${srn.foundDate.toLocalDate()}" required>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon2">2</span>
+                                    <input class="form-control" id="foundDate" type="date" name="foundDate"
+                                           value="${srn.foundDate.toLocalDate()}" required>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-9 mb-3">
                                 <label for="foundPlace">Участок УДС</label>
-                                <%--                                <div class="input-group">--%>
-                                <input class="form-control"
-                                       id="foundPlace" type="text" name="foundPlace"
-                                       placeholder="Адрес, номер дома / дорога, километр"
-                                       value="${srn.foundPlace}" required>
-                                <%--                                </div>--%>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon3">3</span>
+                                    <input class="form-control"
+                                           id="foundPlace" type="text" name="foundPlace"
+                                           placeholder="Адрес, номер дома / дорога, километр"
+                                           value="${srn.foundPlace}" required>
+                                </div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="roadCategory">Категория</label>
-                                <select class="form-control custom-select d-block w-100"
-                                        id="roadCategory"
-                                        name="roadCategory" required>
-                                    <option value="${srn.roadCategory.id}">${srn.roadCategory.title}</option>
-                                    ${roadCategories}
-                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon4">4</span>
+                                    <select class="form-control custom-select d-block"
+                                            id="roadCategory"
+                                            name="roadCategory" required>
+                                        <option value="${srn.roadCategory.id}">${srn.roadCategory.title}</option>
+                                        ${roadCategories}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 mb-3">
                                 <label for="shortcoming">Характер недостатка</label>
-                                <select class="form-control custom-select d-block w-100"
-                                        id="shortcoming"
-                                        name="shortcoming" required>
-                                    <option value="${srn.shortcoming.id}">${srn.shortcoming.title}</option>
-                                    ${shortcomings}
-                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon5">5</span>
+                                    <select class="form-control custom-select d-block"
+                                            id="shortcoming"
+                                            name="shortcoming" required>
+                                        <option value="${srn.shortcoming.id}">${srn.shortcoming.title}</option>
+                                        ${shortcomings}
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <label for="devices">Примененные средства измерения</label>
-                                <select class="form-control custom-select d-block w-100"
-                                        id="devices"
-                                        name="devices">
-                                    <option value="${srn.devices.id}">${srn.devices.title}</option>
-                                    ${devices}
-                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon6">6</span>
+                                    <select class="form-control custom-select d-block"
+                                            id="devices"
+                                            name="devices">
+                                        <option value="${srn.devices.id}">${srn.devices.title}</option>
+                                        ${devices}
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="comment">Результаты замеров</label>
-                                <input class="form-control" id="comment" name="comment"
-                                       type="text"
-                                       placeholder="результат и единицы измерения"
-                                       value="${srn.comment}">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon7">7</span>
+                                    <input class="form-control" id="comment" name="comment"
+                                           type="text"
+                                           placeholder="результат и единицы измерения"
+                                           value="${srn.comment}">
+                                </div>
                             </div>
                         </div>
                         <div class="row">
-
-
                             <div class="col-md-8 mb-3">
                                 <label for="sendTo">Кому передано</label>
-                                <input class="form-control" id="sendTo" name="sendTo"
-                                       value="${srn.sendTo}">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon8">8</span>
+                                    <input class="form-control" id="sendTo" name="sendTo"
+                                           value="${srn.sendTo}">
+                                </div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="referralDate">Дата передачи</label>
-                                <input class="form-control" id="referralDate" type="date" name="referralDate"
-                                       value="${srn.referralDate.toLocalDate()}">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon9">9</span>
+                                    <input class="form-control" id="referralDate" type="date" name="referralDate"
+                                           value="${srn.referralDate.toLocalDate()}">
+                                </div>
                             </div>
                         </div>
+                        <hr class="mb-3">
 
-                        <legend>Раздел 2
-                        </legend>
-                        <%--                            <hr class="mb-3">--%>
+                        <h5>Раздел 2
+                        </h5>
 
                         <div class="row">
                             <div class="col-md-4 mb-3">
                                 <label for="measures">Принятые меры</label>
-                                <select class="form-control custom-select d-block w-100"
-                                        id="measures"
-                                        name="measures">
-                                    <option value="${srn.measures.id}">${srn.measures.title}</option>
-                                    ${measure}
-                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon10">10</span>
+                                    <select class="form-control custom-select d-block"
+                                            id="measures"
+                                            name="measures">
+                                        <option value="${srn.measures.id}">${srn.measures.title}</option>
+                                        ${measure}
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-5 mb-3">
                                 <label for="measureAgainst">В отношении кого</label>
-                                <input class="form-control" id="measureAgainst" name="measureAgainst"
-                                       value="${srn.measureAgainst}">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon11">11</span>
+                                    <input class="form-control" id="measureAgainst" name="measureAgainst"
+                                           value="${srn.measureAgainst}">
+                                </div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="measuresDate">Дата принятия мер</label>
-                                <input class="form-control" id="measuresDate" type="date" name="measuresDate"
-                                       value="${srn.measuresDate.toLocalDate()}">
+                                <div class="input-group">
+                                    <span class="input-group-text" id="basic-addon12">12</span>
+                                    <input class="form-control" id="measuresDate" type="date" name="measuresDate"
+                                           value="${srn.measuresDate.toLocalDate()}">
+                                </div>
                             </div>
                         </div>
                         <hr class="mb-5">
@@ -282,6 +315,14 @@
     let control = document.getElementById('control').value;
     if (control !== null && control !== '') {
         document.getElementById('control').style.backgroundColor = 'red';
+    }
+    const elements = document.getElementsByClassName("form-control");
+    for (let i = 0; i < elements.length; i++) {
+        if (elements[i].nodeName == "INPUT") {
+            elements[i].setAttribute("title", elements[i].value);
+        } else if (elements[i].nodeName == "SELECT") {
+            elements[i].setAttribute("title", elements[i].selectedOptions[0].text);
+        }
     }
 </script>
 <jsp:include page="../template/_footer.jsp"/>

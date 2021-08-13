@@ -170,6 +170,8 @@ public class MainController {
             }
             if (!srn.getControl().equals("")) {
                 srn.setController(user.getName());
+            } else {
+                srn.setController("");
             }
 
             model.addAttribute("srn", srnRepository.save(srn));
@@ -298,14 +300,13 @@ public class MainController {
 //     */
 //
     @PostMapping(path = "/manager/fix")
-    public String fixSrn(@RequestParam int id, Model model) {
-        model.addAttribute("data", getData(id));
+    public String fixSrn(StreetRoadNetwork srn, BindingResult bindingResult, Model model) {
+        model.addAttribute("data", getData(srn.getId()));
+
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
         getVocabulary(model, user);
-
-        StreetRoadNetwork srn = srnRepository.findById(id);
 
         srn.setStatus(statusRepository.findById(3));
         srn.setCloseDate(new Date(new java.util.Date().getTime()));
@@ -313,8 +314,8 @@ public class MainController {
         try {
             model.addAttribute("srn", srnRepository.save(srn));
             journaling(srn);
-            model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(id));
-        } catch (IOException e) {
+            model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(srn.getId()));
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "manager";
@@ -341,7 +342,9 @@ public class MainController {
             depCode = user.getDepartment().getCode();
         }
         Iterable<StreetRoadNetwork> allSrnByDepCode;
-        if (depCode == 1140000) allSrnByDepCode = srnRepository.findAll();
+        if (depCode == 1140000) allSrnByDepCode = srnRepository.findAllByCreateDateAfterOrderById(
+                new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000))
+        );
         else {
             allSrnByDepCode = srnRepository.findAllByDepartment_CodeOrderById(depCode);
         }
@@ -381,7 +384,7 @@ public class MainController {
             String control = "";
 
             try {
-                if (!srn.getControl().equals("") && srn.getControl() != null) {
+                if (srn.getControl() != null && !srn.getControl().equals("")) {
                     control = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\" style=\"color: red\" class=\"bi bi-exclamation-circle-fill text-alert\" viewBox=\"0 0 16 16\">\n  <path d=\"M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z\"/>\n</svg>";
                 }
             } catch (NullPointerException e) {
@@ -394,7 +397,7 @@ public class MainController {
                     .append("onclick=\"location.href='/srn/manager/get?id=")
                     .append(srn.getId())
                     .append("'\"")
-                    .append("><td>")
+                    .append("><td class=\"text-center\">")
                     .append(srn.getId())
                     .append("</td><td>")
 //                    .append("")
@@ -404,11 +407,11 @@ public class MainController {
                     .append(srn.getFoundWho())
                     .append("</td><td>")
                     .append(srn.getFoundPlace())
-                    .append("</td><td>")
+                    .append("</td><td class=\"text-center\">")
                     .append(srn.getFoundDate())
                     .append("</td><td>")
                     .append(srn.getShortcoming().getTitle())
-                    .append("</td><td>")
+                    .append("</td><td class=\"text-center\">")
 //                    .append(srn.getComment())
 //                    .append("</td><td>")
 //                    .append(srn.getDevices().getTitle())
@@ -419,7 +422,7 @@ public class MainController {
 //                    .append("</td><td>")
 //                    .append(srn.getMeasuresDate())
                     .append(srn.getStatus().getTitle())
-                    .append("</td><td>")
+                    .append("</td><td class=\"text-center\">")
                     .append(control)
                     .append("</td></tr>");
         }
