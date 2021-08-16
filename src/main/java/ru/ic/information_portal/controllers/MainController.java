@@ -330,7 +330,7 @@ public class MainController {
      */
 
     @GetMapping(path = "/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard(@RequestParam(defaultValue = "all") String filter, Model model) {
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
@@ -342,12 +342,50 @@ public class MainController {
             depCode = user.getDepartment().getCode();
         }
         Iterable<StreetRoadNetwork> allSrnByDepCode;
-        if (depCode == 1140000) allSrnByDepCode = srnRepository.findAllByCreateDateAfterOrderById(
-                new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000))
-        );
-        else {
-            allSrnByDepCode = srnRepository.findAllByDepartment_CodeOrderById(depCode);
+        switch (filter) {
+            case "inWork":
+                if (depCode == 1140000) {
+                    allSrnByDepCode = srnRepository.findAllByCreateDateAfterAndStatus_FixedOrderById(
+                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000)),
+                            false
+                    );
+                } else {
+                    allSrnByDepCode = srnRepository.findAllByDepartment_CodeAndCreateDateAfterAndStatus_FixedOrderById(
+                            depCode,
+                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000)),
+                            false
+                    );
+                }
+                model.addAttribute("fastFilterRadio", "inWork");
+                break;
+            case "underControl":
+                if (depCode == 1140000) {
+                    allSrnByDepCode = srnRepository.findAllByCreateDateAfterAndControlNotNullOrderById(
+                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000))
+                    );
+                } else {
+                    allSrnByDepCode = srnRepository.findAllByDepartment_CodeAndCreateDateAfterAndControlNotNullOrderById(
+                            depCode,
+                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000))
+                    );
+                }
+                model.addAttribute("fastFilterRadio", "underControl");
+                break;
+            default:
+                if (depCode == 1140000) {
+                    allSrnByDepCode = srnRepository.findAllByCreateDateAfterOrderById(
+                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000))
+                    );
+                } else {
+                    allSrnByDepCode = srnRepository.findAllByDepartment_CodeAndCreateDateAfterOrderById(
+                            depCode,
+                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000))
+                    );
+                }
+                model.addAttribute("fastFilterRadio", "all");
+                break;
         }
+
 
         StringBuilder stringBuilder = new StringBuilder();
 

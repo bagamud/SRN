@@ -7,12 +7,86 @@
 <body class="bg-light">
 <jsp:include page="../template/_menu.jsp"/>
 
-<div class="container-fluid">
-    <div class="py-3 row">
-        <main class="col-md-auto m-auto px-md-4" role="main">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Журнал</h1>
+<nav id="sidebarMenu"
+     class="col-md-3 col-lg-2 d-md-block mb-auto d-flex mt-5 flex-column sidebar flex-shrink-0 p-3 text-dark bg-light">
+    <hr>
+    <form action="dashboard" method="get" name="fastFilter"> <div class="form-check form-switch">
+        <input class="form-check-input" type="radio" name="filter" id="all" value="all" onchange="this.form.submit()" checked>
+        <label class="form-check-label" for="all">Все</label>
+    </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="radio" name="filter" id="inWork" value="inWork" onchange="this.form.submit()">
+            <label class="form-check-label" for="inWork">В работе</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="radio" name="filter" id="underControl" value="underControl" onchange="this.form.submit()">
+            <label class="form-check-label" for="underControl">На контроле</label>
+        </div>
+    </form>
+    <hr>
+    <form action="${pageContext.request.contextPath}/reports" method="post"
+          name="form" id="formId" ${form_hidden}>
+        <div>
+            <label for="department">Подразделение</label>
+            <select class="form-control custom-select d-block w-100"
+                    id="department"
+                    name="department"
+            ${form_disable}>
+                <option value=""></option>
+                ${departments}
+            </select>
+        </div>
+        <div>
+            <label for="foundPeriodStart">Дата выявления</label>
+            <input class="form-control" id="foundPeriodStart" type="date" name="foundDate"
+                   value="${srn.foundDate.toLocalDate()}">
+        </div>
+        <div>
+            <label for="foundPeriodEnd">Дата выявления</label>
+            <input class="form-control" id="foundPeriodEnd" type="date" name="foundDate"
+                   value="${srn.foundDate.toLocalDate()}">
+        </div>
+        <div>
+            <label for="shortcoming">Характер недостатка</label>
+            <select class="form-control custom-select d-block w-100"
+                    id="shortcoming"
+                    name="shortcoming">
+                <option value="${srn.shortcoming.id}">${srn.shortcoming.title}</option>
+                ${shortcomings}
+            </select>
+        </div>
+        <%--        <div>--%>
+        <%--            <label for="measures">Принятые меры</label>--%>
+        <%--            <select class="form-control custom-select d-block w-100"--%>
+        <%--                    id="measures"--%>
+        <%--                    name="measures">--%>
+        <%--                <option value=""></option>--%>
+        <%--                ${measure}--%>
+        <%--            </select>--%>
+        <%--        </div>--%>
+        <div>
+            <label for="status">Статус</label>
+            <select class="form-control custom-select d-block w-100" id="status" name="status">
+                <option value=""></option>
+                ${status}
+            </select>
+        </div>
+        <hr>
+
+        <div class="row">
+            <div class="col-auto btn-group">
+                <input class="btn btn-primary" type="submit" value="Поиск"
+                       formaction="${pageContext.request.contextPath}/report"/>
+                <input class="btn btn-primary" type="button"
+                       onclick="location.href='${pageContext.request.contextPath}/report'"
+                       value="Очистить"/>
             </div>
+        </div>
+    </form>
+</nav>
+
+
+<div class="col-9 ms-sm-auto col-lg-10 overflow-scroll" style="max-height: 89vh">
             <div class="table-responsive">
                 <table class="table table-hover">
                     <thead>
@@ -39,11 +113,10 @@
                     </tbody>
                 </table>
             </div>
-        </main>
-    </div>
+        </div>
 
-</div>
 <jsp:include page="../template/_footer.jsp"/>
+<script>document.getElementById('${fastFilterRadio}').setAttribute('checked', true)</script>
 </body>
 </html>
 
