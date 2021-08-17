@@ -24,65 +24,65 @@
         </div>
     </form>
     <hr>
-    <form action="${pageContext.request.contextPath}/reports" method="post"
-          name="form" id="formId" ${form_hidden}>
-        <div>
-            <label for="department">Подразделение</label>
-            <select class="form-control custom-select d-block w-100"
-                    id="department"
-                    name="department"
-            ${form_disable}>
-                <option value=""></option>
-                ${departments}
-            </select>
-        </div>
-        <div>
-            <label for="foundPeriodStart">Дата выявления</label>
-            <input class="form-control" id="foundPeriodStart" type="date" name="foundDate"
-                   value="${srn.foundDate.toLocalDate()}">
-        </div>
-        <div>
-            <label for="foundPeriodEnd">Дата выявления</label>
-            <input class="form-control" id="foundPeriodEnd" type="date" name="foundDate"
-                   value="${srn.foundDate.toLocalDate()}">
-        </div>
-        <div>
-            <label for="shortcoming">Характер недостатка</label>
-            <select class="form-control custom-select d-block w-100"
-                    id="shortcoming"
-                    name="shortcoming">
-                <option value="${srn.shortcoming.id}">${srn.shortcoming.title}</option>
-                ${shortcomings}
-            </select>
-        </div>
-        <%--        <div>--%>
-        <%--            <label for="measures">Принятые меры</label>--%>
-        <%--            <select class="form-control custom-select d-block w-100"--%>
-        <%--                    id="measures"--%>
-        <%--                    name="measures">--%>
-        <%--                <option value=""></option>--%>
-        <%--                ${measure}--%>
-        <%--            </select>--%>
-        <%--        </div>--%>
-        <div>
-            <label for="status">Статус</label>
-            <select class="form-control custom-select d-block w-100" id="status" name="status">
-                <option value=""></option>
-                ${status}
-            </select>
-        </div>
-        <hr>
+<%--    <form action="${pageContext.request.contextPath}/reports" method="post"--%>
+<%--          name="form" id="formId" ${form_hidden}>--%>
+<%--        <div>--%>
+<%--            <label for="department">Подразделение</label>--%>
+<%--            <select class="form-control custom-select d-block w-100"--%>
+<%--                    id="department"--%>
+<%--                    name="department"--%>
+<%--            ${form_disable}>--%>
+<%--                <option value=""></option>--%>
+<%--                ${departments}--%>
+<%--            </select>--%>
+<%--        </div>--%>
+<%--        <div>--%>
+<%--            <label for="foundPeriodStart">Дата выявления</label>--%>
+<%--            <input class="form-control" id="foundPeriodStart" type="date" name="foundDate"--%>
+<%--                   value="${srn.foundDate.toLocalDate()}">--%>
+<%--        </div>--%>
+<%--        <div>--%>
+<%--            <label for="foundPeriodEnd">Дата выявления</label>--%>
+<%--            <input class="form-control" id="foundPeriodEnd" type="date" name="foundDate"--%>
+<%--                   value="${srn.foundDate.toLocalDate()}">--%>
+<%--        </div>--%>
+<%--        <div>--%>
+<%--            <label for="shortcoming">Характер недостатка</label>--%>
+<%--            <select class="form-control custom-select d-block w-100"--%>
+<%--                    id="shortcoming"--%>
+<%--                    name="shortcoming">--%>
+<%--                <option value="${srn.shortcoming.id}">${srn.shortcoming.title}</option>--%>
+<%--                ${shortcomings}--%>
+<%--            </select>--%>
+<%--        </div>--%>
+<%--        &lt;%&ndash;        <div>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;            <label for="measures">Принятые меры</label>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;            <select class="form-control custom-select d-block w-100"&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                    id="measures"&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                    name="measures">&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                <option value=""></option>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;                ${measure}&ndash;%&gt;--%>
+<%--        &lt;%&ndash;            </select>&ndash;%&gt;--%>
+<%--        &lt;%&ndash;        </div>&ndash;%&gt;--%>
+<%--        <div>--%>
+<%--            <label for="status">Статус</label>--%>
+<%--            <select class="form-control custom-select d-block w-100" id="status" name="status">--%>
+<%--                <option value=""></option>--%>
+<%--                ${status}--%>
+<%--            </select>--%>
+<%--        </div>--%>
+<%--        <hr>--%>
 
-        <div class="row">
-            <div class="col-auto btn-group">
-                <input class="btn btn-primary" type="submit" value="Поиск"
-                       formaction="${pageContext.request.contextPath}/report"/>
-                <input class="btn btn-primary" type="button"
-                       onclick="location.href='${pageContext.request.contextPath}/report'"
-                       value="Очистить"/>
-            </div>
-        </div>
-    </form>
+<%--        <div class="row">--%>
+<%--            <div class="col-auto btn-group">--%>
+<%--                <input class="btn btn-primary" type="submit" value="Поиск"--%>
+<%--                       formaction="${pageContext.request.contextPath}/report"/>--%>
+<%--                <input class="btn btn-primary" type="button"--%>
+<%--                       onclick="location.href='${pageContext.request.contextPath}/report'"--%>
+<%--                       value="Очистить"/>--%>
+<%--            </div>--%>
+<%--        </div>--%>
+<%--    </form>--%>
 </nav>
 
 

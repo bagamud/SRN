@@ -14,13 +14,13 @@ public interface SrnRepository extends CrudRepository<StreetRoadNetwork, Integer
 
     Iterable<StreetRoadNetwork> findAllByCreateDateAfterAndStatus_FixedOrderById(Date createDate, boolean status_fixed);
 
-    Iterable<StreetRoadNetwork> findAllByCreateDateAfterAndControlNotNullOrderById(Date createDate);
+    Iterable<StreetRoadNetwork> findAllByUnderControlOrderById(boolean underControl);
 
     Iterable<StreetRoadNetwork> findAllByDepartment_CodeAndCreateDateAfterOrderById(int code, Date createDate);
 
     Iterable<StreetRoadNetwork> findAllByDepartment_CodeAndCreateDateAfterAndStatus_FixedOrderById(int code, Date createDate, boolean status_fixed);
 
-    Iterable<StreetRoadNetwork> findAllByDepartment_CodeAndCreateDateAfterAndControlNotNullOrderById(int code, Date createDate);
+    Iterable<StreetRoadNetwork> findAllByDepartment_CodeAndUnderControlOrderById(int code, boolean underControl);
 
     long countByStatus_Fixed(boolean fixed);
 

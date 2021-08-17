@@ -46,6 +46,7 @@ public class StreetRoadNetwork {
     private String measuresIfNot;
     private String control;
     private String controller;
+    private boolean underControl;
 
     public int getId() {
         return id;
@@ -215,5 +216,13 @@ public class StreetRoadNetwork {
 
     public void setController(String controller) {
         this.controller = controller;
+    }
+
+    public boolean isUnderControl() {
+        return underControl;
+    }
+
+    public void setUnderControl(boolean underControl) {
+        this.underControl = underControl;
     }
 }

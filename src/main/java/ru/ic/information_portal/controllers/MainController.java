@@ -168,10 +168,14 @@ public class MainController {
             if (srn.getDepartment() == null) {
                 srn.setDepartment(user.getDepartment());
             }
-            if (!srn.getControl().equals("")) {
-                srn.setController(user.getName());
-            } else {
-                srn.setController("");
+            if (srn.getControl() != null) {
+                if (!srn.getControl().equals("")) {
+                    srn.setController(user.getName());
+                    srn.setUnderControl(true);
+                } else {
+                    srn.setController("");
+                    srn.setUnderControl(false);
+                }
             }
 
             model.addAttribute("srn", srnRepository.save(srn));
@@ -244,6 +248,7 @@ public class MainController {
     }
 
     @PostMapping(path = "/upload_fix")
+
     public String uploadFileFix(@RequestParam("file") MultipartFile file,
                                 StreetRoadNetwork srn,
                                 Model model) throws IOException {
@@ -300,18 +305,18 @@ public class MainController {
 //     */
 //
     @PostMapping(path = "/manager/fix")
-    public String fixSrn(StreetRoadNetwork srn, BindingResult bindingResult, Model model) {
-        model.addAttribute("data", getData(srn.getId()));
+    public String fixSrn(@RequestParam int id, Model model) {
+        model.addAttribute("data", getData(id));
 
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
         getVocabulary(model, user);
 
-        srn.setStatus(statusRepository.findById(3));
-        srn.setCloseDate(new Date(new java.util.Date().getTime()));
-
         try {
+            StreetRoadNetwork srn = srnRepository.findById(id);
+            srn.setStatus(statusRepository.findById(3));
+            srn.setCloseDate(new Date(new java.util.Date().getTime()));
             model.addAttribute("srn", srnRepository.save(srn));
             journaling(srn);
             model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(srn.getId()));
@@ -360,14 +365,9 @@ public class MainController {
                 break;
             case "underControl":
                 if (depCode == 1140000) {
-                    allSrnByDepCode = srnRepository.findAllByCreateDateAfterAndControlNotNullOrderById(
-                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000))
-                    );
+                    allSrnByDepCode = srnRepository.findAllByUnderControlOrderById(true);
                 } else {
-                    allSrnByDepCode = srnRepository.findAllByDepartment_CodeAndCreateDateAfterAndControlNotNullOrderById(
-                            depCode,
-                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000))
-                    );
+                    allSrnByDepCode = srnRepository.findAllByDepartment_CodeAndUnderControlOrderById(depCode, true);
                 }
                 model.addAttribute("fastFilterRadio", "underControl");
                 break;
@@ -423,7 +423,11 @@ public class MainController {
 
             try {
                 if (srn.getControl() != null && !srn.getControl().equals("")) {
-                    control = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\" style=\"color: red\" class=\"bi bi-exclamation-circle-fill text-alert\" viewBox=\"0 0 16 16\">\n  <path d=\"M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z\"/>\n</svg>";
+                    control = "<div title=\"" + srn.getControl() + ". " + srn.getController() + "\">"
+                            + "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\"" +
+                            " style=\"color: red\" class=\"bi bi-exclamation-circle-fill text-alert\" viewBox=\"0 0 16 16\">\n" +
+                            "  <path d=\"M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z\"/>" +
+                            "\n</svg></div>";
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -571,21 +575,21 @@ public class MainController {
 
     private String getData(int srn_id) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<label>Недостаток</label><hr class=\"mb\">");
+        sb.append("<label>Недостаток</label>");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 1)) {
             sb.append("<img src=\"/srnFiles/uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }
-        sb.append("<label>Документы</label><hr class=\"mb\">");
+        sb.append("<hr class=\"mb\"><label>Документы</label>");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 2)) {
             sb.append("<img src=\"/srnFiles/uploads/")
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }
-        sb.append("<label>Результат</label>");
+        sb.append("<hr class=\"mb\"><label>Результат</label>");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 3)) {
             sb.append("<img src=\"/srnFiles/uploads/")
