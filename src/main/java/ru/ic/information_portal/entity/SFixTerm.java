@@ -40,7 +40,7 @@ public class SFixTerm {
     }
 
     public void setRoadCategory(RoadCategory roadCategory) {
-        roadCategory = roadCategory;
+        this.roadCategory = roadCategory;
     }
 
     public long getFixTerm() {

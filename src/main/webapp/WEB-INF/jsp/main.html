@@ -40,7 +40,7 @@
                     <p>В данном журнале очуществляется формирование и работа
                         с записями о выявленных недостатках в содержании улично-дорожной сети
                     </p>
-                    <a class="btn btn-primary" href="/srn/dashboard">
+                    <a id="srn" class="btn btn-primary" href="/srn/dashboard">
                         Перейти
                     </a>
                 </div>
@@ -53,6 +53,7 @@
 </main>
 
 <script src="/srn/webjars/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+<script>if (navigator.userAgent.search("MSIE") >= 0) document.getElementById('srn').setAttribute('href', '')</script>
 
 </body>
 </html>

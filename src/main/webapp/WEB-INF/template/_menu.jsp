@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
     <div class="navbar-brand col-md-3 col-lg-2 me-0 px-3 d-flex align-items-center text-decoration-none">
-        <a class="nav-item text-decoration-none align-content-centercenter text-white" href="/">
+        <a class="nav-item text-decoration-none align-content-center text-white" href="/">
             <img alt="Russian Federation"
                  height="30"
                  src="${pageContext.request.contextPath}/img/mvd.png"

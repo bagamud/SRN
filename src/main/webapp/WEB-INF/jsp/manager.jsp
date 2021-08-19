@@ -318,9 +318,9 @@
     }
     const elements = document.getElementsByClassName("form-control");
     for (let i = 0; i < elements.length; i++) {
-        if (elements[i].nodeName == "INPUT") {
+        if (elements[i].nodeName === "INPUT") {
             elements[i].setAttribute("title", elements[i].value);
-        } else if (elements[i].nodeName == "SELECT") {
+        } else if (elements[i].nodeName === "SELECT") {
             elements[i].setAttribute("title", elements[i].selectedOptions[0].text);
         }
     }

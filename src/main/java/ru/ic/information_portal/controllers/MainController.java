@@ -198,7 +198,10 @@ public class MainController {
 
         if (file != null) {
             String fileName = srn.getId() + ".1." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
-            file.transferTo(new File(uploadPath + "/" + fileName));
+            File uploadFile = new File(uploadPath + "/" + fileName);
+            file.transferTo(uploadFile);
+
+//            imgCompressor(uploadFile);
 
             RelatedFiles relatedFiles = new RelatedFiles();
             relatedFiles.setSrn(srn.getId());
@@ -350,14 +353,10 @@ public class MainController {
         switch (filter) {
             case "inWork":
                 if (depCode == 1140000) {
-                    allSrnByDepCode = srnRepository.findAllByCreateDateAfterAndStatus_FixedOrderById(
-                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000)),
-                            false
-                    );
+                    allSrnByDepCode = srnRepository.findAllByStatus_FixedOrderById(false);
                 } else {
-                    allSrnByDepCode = srnRepository.findAllByDepartment_CodeAndCreateDateAfterAndStatus_FixedOrderById(
+                    allSrnByDepCode = srnRepository.findAllByDepartment_CodeAndStatus_FixedOrderById(
                             depCode,
-                            new Date(new java.util.Date().getTime() - (30L * 24 * 60 * 60 * 1000)),
                             false
                     );
                 }
@@ -395,29 +394,29 @@ public class MainController {
 //                    - srn.getReferralDate().getTime()
 //                    > (7 * 24 * 60 * 60 * 1000);
 //                    > (sFixTermRepository.findByShortcomingIdAndRoadCategoryId(srn.getShortcoming().getId(), srn.getRoadCategory().getId()).getFixTerm());
-//            if (srn.getFoundDate() != null && srn.getReferralDate() != null) {
-//                if (srn.getReferralDate() != null) {
-//                    if (new Date(new java.util.Date().getTime()).getTime()
-//                            - srn.getReferralDate().getTime()
-//                            > (7 * 24 * 60 * 60 * 1000)) {
-//                        if (!srn.getStatus().isFixed()) {
-//                            color = "class=\"alert-danger\"";
-//                        } else color = "class=\"alert-warning\"";
-//                    } else if (srn.getStatus().isFixed()) {
-//                        color = "class=\"alert-success\"";
-//                    }
-//                } else {
-//                    if (new Date(new java.util.Date().getTime()).getTime()
-//                            - srn.getReferralDate().getTime()
-//                            > (7 * 24 * 60 * 60 * 1000)) {
-//                        if (!srn.getStatus().isFixed()) {
-//                            color = "class=\"alert-danger\"";
-//                        } else color = "class=\"alert-warning\"";
-//                    } else if (srn.getStatus().isFixed()) {
-//                        color = "class=\"alert-success\"";
-//                    }
-//                }
-//            }
+            if (srn.getFoundDate() != null) {
+                if (srn.getReferralDate() != null) {
+                    if (new Date(new java.util.Date().getTime()).getTime()
+                            - srn.getReferralDate().getTime()
+                            > (7 * 24 * 60 * 60 * 1000)) {
+                        if (!srn.getStatus().isFixed()) {
+                            color = "class=\"alert-danger\"";
+                        } else color = "class=\"alert-warning\"";
+                    } else if (srn.getStatus().isFixed()) {
+                        color = "class=\"alert-success\"";
+                    }
+                } else {
+                    if (new Date(new java.util.Date().getTime()).getTime()
+                            - srn.getFoundDate().getTime()
+                            > (7 * 24 * 60 * 60 * 1000)) {
+                        if (!srn.getStatus().isFixed()) {
+                            color = "class=\"alert-danger\"";
+                        } else color = "class=\"alert-warning\"";
+                    } else if (srn.getStatus().isFixed()) {
+                        color = "class=\"alert-success\"";
+                    }
+                }
+            }
 
             String control = "";
 
@@ -433,6 +432,17 @@ public class MainController {
                 e.printStackTrace();
             }
 
+            String miniature = "";
+
+            try {
+                if (relatedFilesRepository.findFirstBySrnAndType(srn.getId(), 1) != null) {
+                    miniature = "\"<img src=\"/srnFiles/uploads/miniature/"
+                            + relatedFilesRepository.findFirstBySrnAndType(srn.getId(), 1).getFileName()
+                            + "\" width=\"100%\">";
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
 
             stringBuilder.append("<tr ")
                     .append(color)
@@ -442,8 +452,8 @@ public class MainController {
                     .append("><td class=\"text-center\">")
                     .append(srn.getId())
                     .append("</td><td>")
-//                    .append("")
-//                    .append("</td><td>")
+                    .append(miniature)
+                    .append("</td><td>")
                     .append(srn.getDepartment().getTitle())
                     .append("</td><td>")
                     .append(srn.getFoundWho())
@@ -599,6 +609,26 @@ public class MainController {
 
         return sb.toString();
     }
+
+//    public void imgCompressor(File file) throws IOException {
+//        BufferedImage image = ImageIO.read(file);
+//        File compressedFile = new File(uploadPath + "/miniature/" + file.getName());
+//        OutputStream outputStream = new FileOutputStream(compressedFile);
+//        Iterator<ImageWriter> imageWriterIterator = ImageIO.getImageWritersByFormatName("jpg");
+//        ImageWriter imageWriter = (ImageWriter) imageWriterIterator.next();
+//        ImageOutputStream imageOutputStream = ImageIO.createImageOutputStream(outputStream);
+//        imageWriter.setOutput(imageOutputStream);
+//        ImageWriteParam param = imageWriter.getDefaultWriteParam();
+//        param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+//        param.setCompressionQuality(0.05f);
+//        imageWriter.write(null, new IIOImage(
+//                image, null, null
+//        ), param);
+//        outputStream.close();
+//        imageOutputStream.close();
+//        imageWriter.dispose();
+//    }
+
 
     public void journaling(StreetRoadNetwork srn) throws IOException {
         Journal journal = new Journal();
