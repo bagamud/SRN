@@ -46,15 +46,15 @@
             <input class="form-control" id="foundPeriodEnd" type="date" name="foundPeriodEnd"
                    value="${formRequest.foundPeriodEnd.toLocalDate()}">
         </div>
-        <div>
-            <label for="shortcoming">Характер недостатка</label>
-            <select class="form-control custom-select d-block w-100"
-                    id="shortcoming"
-                    name="shortcoming">
-                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.title}</option>
-                ${shortcomings}
-            </select>
-        </div>
+<%--        <div>--%>
+<%--            <label for="shortcoming">Характер недостатка</label>--%>
+<%--            <select class="form-control custom-select d-block w-100"--%>
+<%--                    id="shortcoming"--%>
+<%--                    name="shortcoming">--%>
+<%--                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.title}</option>--%>
+<%--                ${shortcomings}--%>
+<%--            </select>--%>
+<%--        </div>--%>
         <%--        <div>--%>
         <%--            <label for="measures">Принятые меры</label>--%>
         <%--            <select class="form-control custom-select d-block w-100"--%>
@@ -71,6 +71,7 @@
                 ${status}
             </select>
         </div>
+
         <hr>
 
         <div class="row">
