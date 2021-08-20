@@ -51,6 +51,30 @@ public class FormRequest {
         this.foundPlace = foundPlace;
     }
 
+    public Date getFoundPeriodStart() {
+        return foundPeriodStart;
+    }
+
+    public void setFoundPeriodStart(Date foundPeriodStart) {
+        this.foundPeriodStart = foundPeriodStart;
+    }
+
+    public Date getFoundPeriodEnd() {
+        return foundPeriodEnd;
+    }
+
+    public void setFoundPeriodEnd(Date foundPeriodEnd) {
+        this.foundPeriodEnd = foundPeriodEnd;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public Shortcoming getShortcoming() {
         return shortcoming;
     }

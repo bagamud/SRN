@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ic.information_portal.entity.*;
+import ru.ic.information_portal.reports.FormRequest;
 import ru.ic.information_portal.reports.ResponseFactory;
 import ru.ic.information_portal.repositories.*;
 
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 /**
  * В данном классе реализованы методы взаимодействия с сущностями проекта для взаимодействия с веб-формами интерфейса
@@ -251,7 +253,6 @@ public class MainController {
     }
 
     @PostMapping(path = "/upload_fix")
-
     public String uploadFileFix(@RequestParam("file") MultipartFile file,
                                 StreetRoadNetwork srn,
                                 Model model) throws IOException {
@@ -384,8 +385,63 @@ public class MainController {
                 model.addAttribute("fastFilterRadio", "all");
                 break;
         }
+        srnToDashboard(model, allSrnByDepCode);
 
+        return "dashboard";
+    }
 
+    @PostMapping(path = "/dashboard/filter")
+    public String dashboardFilter(FormRequest formRequest, BindingResult bindingResult, Model model) {
+
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Users user = usersRepository.findByUsername(userAuth.getUsername());
+        model.addAttribute("user", user);
+        getVocabulary(model, user);
+
+//        model.addAttribute("formRequest", new FormRequest());
+//        int depCode = 0;
+//        if (user != null) {
+//            depCode = user.getDepartment().getCode();
+//        }
+        ArrayList<StreetRoadNetwork> allSrnByFilter = new ArrayList<>();
+
+        if (formRequest.getDepartment() == null) {
+            for (StreetRoadNetwork srn : srnRepository.findAll()) {
+                allSrnByFilter.add(srn);
+            }
+        } else {
+
+            for (StreetRoadNetwork srn : srnRepository.findAllByDepartment_CodeOrderById(formRequest.getDepartment().getCode())) {
+                allSrnByFilter.add(srn);
+            }
+        }
+
+        if (formRequest.getFoundPeriodStart() != null) {
+            ArrayList<StreetRoadNetwork> list = new ArrayList<>();
+            for (StreetRoadNetwork srn : allSrnByFilter) {
+                if (srn.getCreateDate().getTime() > formRequest.getFoundPeriodStart().getTime()) {
+                    list.add(srn);
+                }
+            }
+            allSrnByFilter = list;
+        }
+
+        if (formRequest.getFoundPeriodEnd() != null) {
+            ArrayList<StreetRoadNetwork> list = new ArrayList<>();
+            for (StreetRoadNetwork srn : allSrnByFilter) {
+                if (srn.getCreateDate().getTime() < formRequest.getFoundPeriodEnd().getTime()) {
+                    list.add(srn);
+                }
+            }
+            allSrnByFilter = list;
+        }
+
+        model.addAttribute("formRequest", formRequest);
+            srnToDashboard(model, allSrnByFilter);
+        return "dashboard";
+    }
+
+    private void srnToDashboard(Model model, Iterable<StreetRoadNetwork> allSrnByDepCode) {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (StreetRoadNetwork srn : allSrnByDepCode) {
@@ -479,9 +535,6 @@ public class MainController {
                     .append("</td></tr>");
         }
         model.addAttribute("srnAllsb", stringBuilder.toString());
-
-
-        return "dashboard";
     }
 
     /**
