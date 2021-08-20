@@ -150,6 +150,14 @@ public class MainController {
                 srn.setCreateDate(new Date(new java.util.Date().getTime()));
             } else srn.setCreateDate(srnRepository.findById(srn.getId()).getCreateDate());
 
+            if (srn.getFoundDate() == null) {
+                if (srn.getId() == 0) {
+                    srn.setFoundDate(new Date(new java.util.Date().getTime()));
+                } else {
+                    srn.setFoundDate(srnRepository.findById(srn.getId()).getFoundDate());
+                }
+            }
+
             if (srn.getStatus() == null) {
                 if (srn.getId() == 0) {
                     srn.setStatus(this.statusRepository.findById(1));
@@ -407,7 +415,6 @@ public class MainController {
                 allSrnByFilter.add(srn);
             }
         } else {
-
             for (StreetRoadNetwork srn : srnRepository.findAllByDepartment_CodeOrderById(formRequest.getDepartment().getCode())) {
                 allSrnByFilter.add(srn);
             }
@@ -447,29 +454,29 @@ public class MainController {
 //                    - srn.getReferralDate().getTime()
 //                    > (7 * 24 * 60 * 60 * 1000);
 //                    > (sFixTermRepository.findByShortcomingIdAndRoadCategoryId(srn.getShortcoming().getId(), srn.getRoadCategory().getId()).getFixTerm());
-            if (srn.getFoundDate() != null) {
-                if (srn.getReferralDate() != null) {
-                    if (new Date(new java.util.Date().getTime()).getTime()
-                            - srn.getReferralDate().getTime()
-                            > (7 * 24 * 60 * 60 * 1000)) {
-                        if (!srn.getStatus().isFixed()) {
-                            color = "class=\"alert-danger\"";
-                        } else color = "class=\"alert-warning\"";
-                    } else if (srn.getStatus().isFixed()) {
-                        color = "class=\"alert-success\"";
-                    }
-                } else {
-                    if (new Date(new java.util.Date().getTime()).getTime()
-                            - srn.getFoundDate().getTime()
-                            > (7 * 24 * 60 * 60 * 1000)) {
-                        if (!srn.getStatus().isFixed()) {
-                            color = "class=\"alert-danger\"";
-                        } else color = "class=\"alert-warning\"";
-                    } else if (srn.getStatus().isFixed()) {
-                        color = "class=\"alert-success\"";
-                    }
-                }
-            }
+//            if (srn.getFoundDate() != null) {
+//                if (srn.getReferralDate() != null) {
+//                    if (new Date(new java.util.Date().getTime()).getTime()
+//                            - srn.getReferralDate().getTime()
+//                            > (7 * 24 * 60 * 60 * 1000)) {
+//                        if (!srn.getStatus().isFixed()) {
+//                            color = "class=\"alert-danger\"";
+//                        } else color = "class=\"alert-warning\"";
+//                    } else if (srn.getStatus().isFixed()) {
+//                        color = "class=\"alert-success\"";
+//                    }
+//                } else {
+//                    if (new Date(new java.util.Date().getTime()).getTime()
+//                            - srn.getFoundDate().getTime()
+//                            > (7 * 24 * 60 * 60 * 1000)) {
+//                        if (!srn.getStatus().isFixed()) {
+//                            color = "class=\"alert-danger\"";
+//                        } else color = "class=\"alert-warning\"";
+//                    } else if (srn.getStatus().isFixed()) {
+//                        color = "class=\"alert-success\"";
+//                    }
+//                }
+//            }
 
             String control = "";
 
@@ -504,8 +511,8 @@ public class MainController {
                     .append("'\"")
                     .append("><td class=\"text-center\">")
                     .append(srn.getId())
-                    .append("</td><td>")
-                    .append(miniature)
+//                    .append("</td><td>")
+//                    .append(miniature)
                     .append("</td><td>")
                     .append(srn.getDepartment().getTitle())
                     .append("</td><td>")

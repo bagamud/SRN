@@ -10,7 +10,7 @@
 <nav id="sidebarMenu"
      class="col-md-3 col-lg-2 d-md-block mb-auto d-flex mt-5 flex-column sidebar flex-shrink-0 p-3 text-dark bg-light">
     <hr>
-    <form action="dashboard" method="get" name="fastFilter">
+    <form action="${pageContext.request.contextPath}/dashboard" method="get" name="fastFilter">
         <div class="form-check form-switch">
             <input class="form-check-input" type="radio" name="filter" id="all" value="all"
                    onchange="this.form.submit()" checked>
@@ -28,7 +28,7 @@
         </div>
     </form>
     <hr>
-    <form action="${pageContext.request.contextPath}/reports" method="post"
+    <form method="post"
           name="form" id="formId" ${form_hidden}>
         <div>
             <label for="department">Подразделение</label>
@@ -50,27 +50,27 @@
             <input class="form-control" id="foundPeriodEnd" type="date" name="foundPeriodEnd"
                    value="${formRequest.foundPeriodEnd.toLocalDate()}">
         </div>
-        <%--        <div>--%>
-        <%--            <label for="shortcoming">Характер недостатка</label>--%>
-        <%--            <select class="form-control custom-select d-block w-100"--%>
-        <%--                    id="shortcoming"--%>
-        <%--                    name="shortcoming">--%>
-        <%--                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.title}</option>--%>
-        <%--                ${shortcomings}--%>
-        <%--            </select>--%>
-        <%--        </div>--%>
-        <%--        <div>--%>
-        <%--            <label for="measures">Принятые меры</label>--%>
-        <%--            <select class="form-control custom-select d-block w-100"--%>
-        <%--                    id="measures"--%>
-        <%--                    name="measures">--%>
-        <%--                <option value=""></option>--%>
-        <%--                ${measure}--%>
-        <%--            </select>--%>
-        <%--        </div>--%>
+        <div>
+            <label for="shortcoming">Характер недостатка</label>
+            <select class="form-control custom-select d-block w-100"
+                    id="shortcoming"
+                    name="shortcoming" disabled>
+                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.title}</option>
+                ${shortcomings}
+            </select>
+        </div>
+        <div>
+            <label for="measures">Принятые меры</label>
+            <select class="form-control custom-select d-block w-100"
+                    id="measures"
+                    name="measures" disabled>
+                <option value=""></option>
+                ${measure}
+            </select>
+        </div>
         <div>
             <label for="status">Статус</label>
-            <select class="form-control custom-select d-block w-100" id="status" name="status">
+            <select class="form-control custom-select d-block w-100" id="status" name="status" disabled>
                 <option value="${formRequest.status.id}">${formRequest.status.title}</option>
                 ${status}
             </select>
@@ -91,13 +91,13 @@
 </nav>
 
 
-<div class="col-9 ms-sm-auto col-lg-10 overflow-scroll" style="max-height: 89vh">
+<div class="col-9 ms-sm-auto col-lg-10 overflow-scroll" <%--style="max-height: 95vh"--%>>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>
             <tr class="text-center">
                 <th>Номер</th>
-                <th>Недостаток</th>
+<%--                <th>Недостаток</th>--%>
                 <th>Подразделение</th>
                 <th>Кем выявлено</th>
                 <th>Участок УДС</th>
