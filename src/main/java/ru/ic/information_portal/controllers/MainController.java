@@ -226,10 +226,7 @@ public class MainController {
     public String uploadFileDoc(@RequestParam("file") MultipartFile file,
                                 StreetRoadNetwork srn,
                                 Model model) throws IOException {
-//        File uploadDir = new File(uploadPath);
-//        if (!uploadDir. exists()) {
-//            uploadDir.mkdir();
-//        }
+
 
         if (file != null) {
             String fileName = srn.getId() + ".2." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
