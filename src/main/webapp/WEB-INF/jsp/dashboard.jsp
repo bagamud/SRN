@@ -10,16 +10,20 @@
 <nav id="sidebarMenu"
      class="col-md-3 col-lg-2 d-md-block mb-auto d-flex mt-5 flex-column sidebar flex-shrink-0 p-3 text-dark bg-light">
     <hr>
-    <form action="dashboard" method="get" name="fastFilter"> <div class="form-check form-switch">
-        <input class="form-check-input" type="radio" name="filter" id="all" value="all" onchange="this.form.submit()" checked>
-        <label class="form-check-label" for="all">Все</label>
-    </div>
+    <form action="dashboard" method="get" name="fastFilter">
         <div class="form-check form-switch">
-            <input class="form-check-input" type="radio" name="filter" id="inWork" value="inWork" onchange="this.form.submit()">
+            <input class="form-check-input" type="radio" name="filter" id="all" value="all"
+                   onchange="this.form.submit()" checked>
+            <label class="form-check-label" for="all">Все</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="radio" name="filter" id="inWork" value="inWork"
+                   onchange="this.form.submit()">
             <label class="form-check-label" for="inWork">В работе</label>
         </div>
         <div class="form-check form-switch">
-            <input class="form-check-input" type="radio" name="filter" id="underControl" value="underControl" onchange="this.form.submit()">
+            <input class="form-check-input" type="radio" name="filter" id="underControl" value="underControl"
+                   onchange="this.form.submit()">
             <label class="form-check-label" for="underControl">На контроле</label>
         </div>
     </form>
@@ -46,15 +50,15 @@
             <input class="form-control" id="foundPeriodEnd" type="date" name="foundPeriodEnd"
                    value="${formRequest.foundPeriodEnd.toLocalDate()}">
         </div>
-<%--        <div>--%>
-<%--            <label for="shortcoming">Характер недостатка</label>--%>
-<%--            <select class="form-control custom-select d-block w-100"--%>
-<%--                    id="shortcoming"--%>
-<%--                    name="shortcoming">--%>
-<%--                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.title}</option>--%>
-<%--                ${shortcomings}--%>
-<%--            </select>--%>
-<%--        </div>--%>
+        <%--        <div>--%>
+        <%--            <label for="shortcoming">Характер недостатка</label>--%>
+        <%--            <select class="form-control custom-select d-block w-100"--%>
+        <%--                    id="shortcoming"--%>
+        <%--                    name="shortcoming">--%>
+        <%--                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.title}</option>--%>
+        <%--                ${shortcomings}--%>
+        <%--            </select>--%>
+        <%--        </div>--%>
         <%--        <div>--%>
         <%--            <label for="measures">Принятые меры</label>--%>
         <%--            <select class="form-control custom-select d-block w-100"--%>
@@ -88,33 +92,33 @@
 
 
 <div class="col-9 ms-sm-auto col-lg-10 overflow-scroll" style="max-height: 89vh">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                    <tr class="text-center">
-                        <th>Номер</th>
-                        <th>Недостаток</th>
-                        <th>Подразделение</th>
-                        <th>Кем выявлено</th>
-                        <th>Участок УДС</th>
-                        <th>Дата выявления</th>
-                        <th>Характер недостатка</th>
-                        <%--                        <th>Результаты замеров</th>--%>
-                        <%--                        <th>Примененные средства измерения</th>--%>
-                        <%--                        <th>Принятые меры</th>--%>
-                        <%--                        <th>Кому / в отношении кого</th>--%>
-                        <%--                        <th>Дата принятия мер</th>--%>
-                        <th>Статус</th>
-                        <th>Контроль</th>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr class="text-center">
+                <th>Номер</th>
+                <th>Недостаток</th>
+                <th>Подразделение</th>
+                <th>Кем выявлено</th>
+                <th>Участок УДС</th>
+                <th>Дата выявления</th>
+                <th>Характер недостатка</th>
+                <%--                        <th>Результаты замеров</th>--%>
+                <%--                        <th>Примененные средства измерения</th>--%>
+                <%--                        <th>Принятые меры</th>--%>
+                <%--                        <th>Кому / в отношении кого</th>--%>
+                <%--                        <th>Дата принятия мер</th>--%>
+                <th>Статус</th>
+                <th>Контроль</th>
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    ${srnAllsb}
-                    </tbody>
-                </table>
-            </div>
-        </div>
+            </tr>
+            </thead>
+            <tbody>
+            ${srnAllsb}
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <jsp:include page="../template/_footer.jsp"/>
 <script>document.getElementById('${fastFilterRadio}').setAttribute('checked', true)</script>

@@ -437,7 +437,7 @@ public class MainController {
         }
 
         model.addAttribute("formRequest", formRequest);
-            srnToDashboard(model, allSrnByFilter);
+        srnToDashboard(model, allSrnByFilter);
         return "dashboard";
     }
 

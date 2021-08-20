@@ -9,19 +9,19 @@
                  width="52"/>
         </a>
     </div>
-            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li>
-                    <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/dashboard">Журнал</a>
-                </li>
-                <li>
-                    <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/manager">Карточка</a>
-                </li>
-                <li>
-                    <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/reports">Отчеты</a>
-                </li>
-            </ul>
+    <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li>
+            <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/dashboard">Журнал</a>
+        </li>
+        <li>
+            <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/manager">Карточка</a>
+        </li>
+        <li>
+            <a class="nav-link px-2 text-white" href="${pageContext.request.contextPath}/reports">Отчеты</a>
+        </li>
+    </ul>
 
-            <label class="nav-link px-2 text-white" id="principal">${user.name}</label>
+    <label class="nav-link px-2 text-white" id="principal">${user.name}</label>
 
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">
