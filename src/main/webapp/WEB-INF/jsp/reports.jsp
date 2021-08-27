@@ -62,7 +62,7 @@
 
     <ul class="nav nav-pils flex-column mb-auto">
         <li>
-            <a class="nav-link link-dark" href="${pageContext.request.contextPath}">Общий отчет</a>
+            <a class="nav-link link-dark" href="${pageContext.request.contextPath}/">Общий отчет</a>
         </li>
     </ul>
     <hr>
