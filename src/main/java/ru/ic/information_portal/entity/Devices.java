@@ -2,10 +2,8 @@ package ru.ic.information_portal.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
-@Table(schema = "iport")
-@Entity(name = "Devices")
+@Entity
 public class Devices {
 
     @Id

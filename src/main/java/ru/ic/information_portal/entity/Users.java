@@ -2,8 +2,7 @@ package ru.ic.information_portal.entity;
 
 import javax.persistence.*;
 
-@Table(schema = "iport")
-@Entity(name = "Users")
+@Entity
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

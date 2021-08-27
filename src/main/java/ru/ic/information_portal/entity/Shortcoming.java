@@ -4,13 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(schema = "iport")
-@Entity(name = "Shortcoming")
+@Entity
 public class Shortcoming {
 
     @Id
     private int id;
-    private String title;
+    private String fullTitle;
+    private String shortTitle;
 
     public int getId() {
         return id;
@@ -20,12 +20,19 @@ public class Shortcoming {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getFullTitle() {
+        return fullTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setFullTitle(String fullTitle) {
+        this.fullTitle = fullTitle;
     }
 
+    public String getShortTitle() {
+        return shortTitle;
+    }
+
+    public void setShortTitle(String shortTitle) {
+        this.shortTitle = shortTitle;
+    }
 }

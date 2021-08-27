@@ -418,6 +418,10 @@ public class MainController {
 //        }
         ArrayList<StreetRoadNetwork> allSrnByFilter = new ArrayList<>();
 
+        if (user.getDepartment().getCode() != 1140000) {
+            formRequest.setDepartment(user.getDepartment());
+        }
+
         if (formRequest.getDepartment() == null) {
             for (StreetRoadNetwork srn : srnRepository.findAll()) {
                 allSrnByFilter.add(srn);
@@ -431,7 +435,7 @@ public class MainController {
         if (formRequest.getFoundPeriodStart() != null) {
             ArrayList<StreetRoadNetwork> list = new ArrayList<>();
             for (StreetRoadNetwork srn : allSrnByFilter) {
-                if (srn.getCreateDate().getTime() > formRequest.getFoundPeriodStart().getTime()) {
+                if (srn.getCreateDate().getTime() >= formRequest.getFoundPeriodStart().getTime()) {
                     list.add(srn);
                 }
             }
@@ -441,7 +445,7 @@ public class MainController {
         if (formRequest.getFoundPeriodEnd() != null) {
             ArrayList<StreetRoadNetwork> list = new ArrayList<>();
             for (StreetRoadNetwork srn : allSrnByFilter) {
-                if (srn.getCreateDate().getTime() < formRequest.getFoundPeriodEnd().getTime()) {
+                if (srn.getCreateDate().getTime() <= formRequest.getFoundPeriodEnd().getTime()) {
                     list.add(srn);
                 }
             }
@@ -522,6 +526,8 @@ public class MainController {
 //                    .append("</td><td>")
 //                    .append(miniature)
                     .append("</td><td>")
+                    .append(srn.getCreateDate())
+                    .append("</td><td>")
                     .append(srn.getDepartment().getTitle())
                     .append("</td><td>")
                     .append(srn.getFoundWho())
@@ -530,7 +536,7 @@ public class MainController {
                     .append("</td><td class=\"text-center\">")
                     .append(srn.getFoundDate())
                     .append("</td><td>")
-                    .append(srn.getShortcoming().getTitle())
+                    .append(srn.getShortcoming().getShortTitle())
                     .append("</td><td class=\"text-center\">")
 //                    .append(srn.getComment())
 //                    .append("</td><td>")
@@ -573,11 +579,13 @@ public class MainController {
 
         StringBuilder sb = new StringBuilder();
         for (Shortcoming shortcoming : shortcomingRepository.findAll()) {
-            sb.append("<option value=\"")
-                    .append(shortcoming.getId())
-                    .append("\">")
-                    .append(shortcoming.getTitle())
-                    .append("</option>");
+            if (shortcoming.getShortTitle() != null) {
+                sb.append("<option value=\"")
+                        .append(shortcoming.getId())
+                        .append("\">")
+                        .append(shortcoming.getShortTitle())
+                        .append("</option>");
+            }
         }
         String shortcomings = sb.toString();
         model.addAttribute("shortcomings", shortcomings);

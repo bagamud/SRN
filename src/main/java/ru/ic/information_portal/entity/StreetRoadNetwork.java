@@ -3,8 +3,7 @@ package ru.ic.information_portal.entity;
 import javax.persistence.*;
 import java.sql.Date;
 
-@Table(schema = "iport")
-@Entity(name = "StreetRoadNetwork")
+@Entity
 public class StreetRoadNetwork {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

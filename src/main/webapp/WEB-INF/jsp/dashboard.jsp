@@ -55,7 +55,7 @@
             <select class="form-control custom-select d-block w-100"
                     id="shortcoming"
                     name="shortcoming" disabled>
-                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.title}</option>
+                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.shortTitle}</option>
                 ${shortcomings}
             </select>
         </div>
@@ -97,7 +97,8 @@
             <thead>
             <tr class="text-center">
                 <th>Номер</th>
-<%--                <th>Недостаток</th>--%>
+                <th>Дата создания</th>
+                <%--                <th>Недостаток</th>--%>
                 <th>Подразделение</th>
                 <th>Кем выявлено</th>
                 <th>Участок УДС</th>

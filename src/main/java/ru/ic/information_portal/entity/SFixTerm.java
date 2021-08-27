@@ -1,9 +1,11 @@
 package ru.ic.information_portal.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-@Table(schema = "iport")
-@Entity(name = "SFixTerm")
+@Entity
 public class SFixTerm {
 
     @Id

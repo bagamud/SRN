@@ -26,7 +26,7 @@
     <div class="py-3 row">
         <main class="col-md-9 m-auto col-lg-10 px-md-4" role="main">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Карточка</h1>
+                <h1 class="h2">Карточка №${srn.id} от ${srn.createDate.toLocalDate()}</h1>
             </div>
             <div class="row">
                 <div class="col-md-7 order-md-1">
@@ -54,11 +54,11 @@
                             <%--                            <input class="form-control"--%>
                             <%--                                   id="username" type="hidden" name="username" hidden--%>
                             <%--                                   value="${pageContext.request.remoteUser}">--%>
-                            <%--                            <div class="col-md-4 mb-3">--%>
-                            <%--                                <label for="createDate">Дата создания звявки</label>--%>
-                            <%--                                <input class="form-control" id="createDate" type="date" name="createDate"--%>
-                            <%--                                       value="${srn.createDate.toLocalDate()}" disabled>--%>
-                            <%--                            </div>--%>
+<%--                                                        <div class="col-md-4 mb-3">--%>
+<%--                                                            <label for="createDate">Дата создания звявки</label>--%>
+<%--                                                            <input class="form-control" id="createDate" type="date" name="createDate"--%>
+<%--                                                                   value="" disabled>--%>
+<%--                                                        </div>--%>
                             <%--                            <div class="col-md-4 mb-3">--%>
                             <%--                                <label for="closeDate">Дата закрытия заявки</label>--%>
                             <%--                                <input class="form-control" id="closeDate" name="closeDate" type="text"--%>
@@ -146,7 +146,7 @@
                                     <select class="form-control custom-select d-block"
                                             id="shortcoming"
                                             name="shortcoming" required>
-                                        <option value="${srn.shortcoming.id}">${srn.shortcoming.title}</option>
+                                        <option value="${srn.shortcoming.id}">${srn.shortcoming.shortTitle}</option>
                                         ${shortcomings}
                                     </select>
                                 </div>
