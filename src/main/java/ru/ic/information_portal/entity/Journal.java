@@ -3,13 +3,17 @@ package ru.ic.information_portal.entity;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity
+@Table(schema = "iport")
+@Entity(name = "Journal")
 public class Journal {
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     @Id
     private int id;
 
-    @ManyToOne(targetEntity = StreetRoadNetwork.class, fetch = FetchType.EAGER)
+    @JoinColumn
+    @ManyToOne(targetEntity = StreetRoadNetwork.class)
     private StreetRoadNetwork srn;
 
     @Column(columnDefinition = "JSON")

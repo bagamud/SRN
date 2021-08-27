@@ -1,11 +1,9 @@
 package ru.ic.information_portal.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
+@Table(schema = "iport")
+@Entity(name = "Role")
 public class Role {
 
     @Id

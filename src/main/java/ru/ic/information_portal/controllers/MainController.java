@@ -188,6 +188,10 @@ public class MainController {
                 }
             }
 
+            if (srn.getSendTo().contains("\"")) {
+                srn.setSendTo(srn.getSendTo().replaceAll("\"", ""));
+            }
+
             model.addAttribute("srn", srnRepository.save(srn));
             journaling(srn);
             model.addAttribute("journal", journalRepository.findAllBySrn_IdOrderByEntryDate(srn.getId()));
@@ -403,6 +407,10 @@ public class MainController {
         model.addAttribute("user", user);
         getVocabulary(model, user);
 
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", bindingResult.getAllErrors());
+        }
+
 //        model.addAttribute("formRequest", new FormRequest());
 //        int depCode = 0;
 //        if (user != null) {
@@ -492,17 +500,17 @@ public class MainController {
                 e.printStackTrace();
             }
 
-            String miniature = "";
-
-            try {
-                if (relatedFilesRepository.findFirstBySrnAndType(srn.getId(), 1) != null) {
-                    miniature = "\"<img src=\"/srnFiles/uploads/miniature/"
-                            + relatedFilesRepository.findFirstBySrnAndType(srn.getId(), 1).getFileName()
-                            + "\" width=\"100%\">";
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
+//            String miniature = "";
+//
+//            try {
+//                if (relatedFilesRepository.findFirstBySrnAndType(srn.getId(), 1) != null) {
+//                    miniature = "\"<img src=\"/srnFiles/uploads/miniature/"
+//                            + relatedFilesRepository.findFirstBySrnAndType(srn.getId(), 1).getFileName()
+//                            + "\" width=\"100%\">";
+//                }
+//            } catch (NullPointerException e) {
+//                e.printStackTrace();
+//            }
 
             stringBuilder.append("<tr ")
                     .append(color)
