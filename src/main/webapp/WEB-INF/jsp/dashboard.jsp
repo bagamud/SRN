@@ -29,7 +29,7 @@
     </form>
     <hr>
     <form method="post"
-          name="form" id="formId" ${form_hidden}>
+          name="form" id="formId">
         <div>
             <label for="department">Подразделение</label>
             <select class="form-control custom-select d-block w-100"
