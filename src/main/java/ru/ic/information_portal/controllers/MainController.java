@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ic.information_portal.entity.*;
-import ru.ic.information_portal.reports.FormRequest;
-import ru.ic.information_portal.reports.ResponseFactory;
+import ru.ic.information_portal.reports.*;
 import ru.ic.information_portal.repositories.*;
 
 import java.io.File;
@@ -170,7 +169,6 @@ public class MainController {
                 srn.setStatus(this.statusRepository.findById(2));
             }
 
-
             if (srn.getStatus().isFixed()) {
                 srn.setCloseDate(new Date(new java.util.Date().getTime()));
             }
@@ -205,10 +203,6 @@ public class MainController {
     public String uploadFileShortcoming(@RequestParam("file") MultipartFile file,
                                         StreetRoadNetwork srn,
                                         Model model) throws IOException {
-//        File uploadDir = new File(uploadPath);
-//        if (!uploadDir.exists()) {
-//            uploadDir.mkdir();
-//        }
 
         if (file != null) {
             String fileName = srn.getId() + ".1." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
@@ -239,7 +233,6 @@ public class MainController {
                                 StreetRoadNetwork srn,
                                 Model model) throws IOException {
 
-
         if (file != null) {
             String fileName = srn.getId() + ".2." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
             file.transferTo(new File(uploadPath + "/" + fileName));
@@ -265,10 +258,6 @@ public class MainController {
     public String uploadFileFix(@RequestParam("file") MultipartFile file,
                                 StreetRoadNetwork srn,
                                 Model model) throws IOException {
-//        File uploadDir = new File(uploadPath);
-//        if (!uploadDir.exists()) {
-//            uploadDir.mkdir();
-//        }
 
         if (file != null) {
             String fileName = srn.getId() + ".3." + new Timestamp(new Date(new java.util.Date().getTime()).getTime()) + "." + file.getOriginalFilename();
@@ -290,7 +279,8 @@ public class MainController {
 
         return "manager";
     }
-//    /**
+
+    //    /**
 //     * Метод контроллера реализующий обновление записи об инциденте из веб-формы в баз данных, возвращает обновленную
 //     * запись из базы данных и записывает в аттрибуты для отображения в веб-форме
 //     *
@@ -300,14 +290,7 @@ public class MainController {
 //     * @return возвращяет путь к странице
 //     */
 //
-//    @PostMapping(path = "/manager/upd")
-//    public String updateIncident(/*@Valid*/ StreetRoadNetwork srn, @RequestParam int id, Model model) {
-//        getVocabulary(model);
-//        model.addAttribute("srn", srnRepository.updateIncident(incident, id)));
-//        return "manager";
-//    }
-
-    //    /**
+//    /**
 //     * Метод контроллера реализующий обновление в баз данных статуса записи об инциденте
 //     * на "Решен" и формирование даты решения заявки, возвращает обновленную
 //     * запись из базы данных и записывает в аттрибуты для отображения в веб-форме
@@ -668,10 +651,17 @@ public class MainController {
         sb.append("<hr class=\"mb\"><label>Документы</label>");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 2)) {
-            sb.append("<img src=\"/srnFiles/uploads/")
-                    .append(a.getFileName())
-                    .append("\" width=\"100%\">");
+            if (a.getFileName().endsWith("pdf")) {
+                sb.append("<object data=\"/srnFiles/uploads/")
+                        .append(a.getFileName())
+                        .append("\" type=\"application/pdf\" width=\"100%\" height=\"165%\"></object>");
+            } else {
+                sb.append("<img src=\"/srnFiles/uploads/")
+                        .append(a.getFileName())
+                        .append("\" width=\"100%\">");
+            }
         }
+
         sb.append("<hr class=\"mb\"><label>Результат</label>");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 3)) {

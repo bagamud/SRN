@@ -91,7 +91,7 @@
 </nav>
 
 
-<div class="col-9 ms-sm-auto col-lg-10 overflow-scroll" <%--style="max-height: 95vh"--%>>
+<div class="col-9 ms-sm-auto col-lg-10 overflow-scroll" style="max-height: 89vh">
     <div class="table-responsive">
         <table class="table table-hover">
             <thead>

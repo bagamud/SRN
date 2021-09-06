@@ -54,11 +54,11 @@
                             <%--                            <input class="form-control"--%>
                             <%--                                   id="username" type="hidden" name="username" hidden--%>
                             <%--                                   value="${pageContext.request.remoteUser}">--%>
-<%--                                                        <div class="col-md-4 mb-3">--%>
-<%--                                                            <label for="createDate">Дата создания звявки</label>--%>
-<%--                                                            <input class="form-control" id="createDate" type="date" name="createDate"--%>
-<%--                                                                   value="" disabled>--%>
-<%--                                                        </div>--%>
+                            <%--                                                        <div class="col-md-4 mb-3">--%>
+                            <%--                                                            <label for="createDate">Дата создания звявки</label>--%>
+                            <%--                                                            <input class="form-control" id="createDate" type="date" name="createDate"--%>
+                            <%--                                                                   value="" disabled>--%>
+                            <%--                                                        </div>--%>
                             <%--                            <div class="col-md-4 mb-3">--%>
                             <%--                                <label for="closeDate">Дата закрытия заявки</label>--%>
                             <%--                                <input class="form-control" id="closeDate" name="closeDate" type="text"--%>
