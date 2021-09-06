@@ -633,10 +633,8 @@ public class MainController {
 
         if (user.getDepartment().getCode() != 1140000) {
             model.addAttribute("form_disable", "disabled");
-//            model.addAttribute("form_control", "bg-danger");
             model.addAttribute("form_hidden", "hidden");
         }
-
     }
 
     private String getData(int srn_id) {
@@ -691,7 +689,6 @@ public class MainController {
 //        imageOutputStream.close();
 //        imageWriter.dispose();
 //    }
-
 
     public void journaling(StreetRoadNetwork srn) throws IOException {
         Journal journal = new Journal();
