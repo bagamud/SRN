@@ -659,7 +659,6 @@ public class MainController {
                         .append("\" width=\"100%\">");
             }
         }
-
         sb.append("<hr class=\"mb\"><label>Результат</label>");
 
         for (RelatedFiles a : relatedFilesRepository.findAllBySrnAndTypeOrderById(srn_id, 3)) {
@@ -667,7 +666,6 @@ public class MainController {
                     .append(a.getFileName())
                     .append("\" width=\"100%\">");
         }
-
         return sb.toString();
     }
 
