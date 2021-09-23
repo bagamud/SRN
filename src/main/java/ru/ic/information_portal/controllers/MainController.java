@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ic.information_portal.entity.*;
-import ru.ic.information_portal.reports.*;
+import ru.ic.information_portal.reports.FormRequest;
+import ru.ic.information_portal.reports.ResponseFactory;
 import ru.ic.information_portal.repositories.*;
 
 import java.io.File;
@@ -445,33 +446,18 @@ public class MainController {
         int count = 0;
         for (StreetRoadNetwork srn : allSrn) {
             String color = "";
-//            boolean endTerm = new Date(new java.util.Date().getTime()).getTime()
-//                    - srn.getReferralDate().getTime()
-//                    > (7 * 24 * 60 * 60 * 1000);
-//                    > (sFixTermRepository.findByShortcomingIdAndRoadCategoryId(srn.getShortcoming().getId(), srn.getRoadCategory().getId()).getFixTerm());
-//            if (srn.getFoundDate() != null) {
-//                if (srn.getReferralDate() != null) {
-//                    if (new Date(new java.util.Date().getTime()).getTime()
-//                            - srn.getReferralDate().getTime()
-//                            > (7 * 24 * 60 * 60 * 1000)) {
-//                        if (!srn.getStatus().isFixed()) {
-//                            color = "class=\"alert-danger\"";
-//                        } else color = "class=\"alert-warning\"";
-//                    } else if (srn.getStatus().isFixed()) {
-//                        color = "class=\"alert-success\"";
-//                    }
-//                } else {
-//                    if (new Date(new java.util.Date().getTime()).getTime()
-//                            - srn.getFoundDate().getTime()
-//                            > (7 * 24 * 60 * 60 * 1000)) {
-//                        if (!srn.getStatus().isFixed()) {
-//                            color = "class=\"alert-danger\"";
-//                        } else color = "class=\"alert-warning\"";
-//                    } else if (srn.getStatus().isFixed()) {
-//                        color = "class=\"alert-success\"";
-//                    }
-//                }
-//            }
+            if (!srn.getStatus().isFixed() && srn.getReferralDate() != null) {
+                if (new java.util.Date().getTime()
+                        - srn.getReferralDate().getTime()
+                        > (7 * 24 * 60 * 60 * 1000)) {
+                    color = "class=\"alert-danger\"";
+                } else if (new java.util.Date().getTime()
+                        - srn.getReferralDate().getTime()
+                        > (5 * 24 * 60 * 60 * 1000)) {
+                    color = "class=\"alert-warning\"";
+                }
+            }
+
 
             String notes = "";
 
@@ -483,12 +469,13 @@ public class MainController {
                             "\n</svg>";
                 }
 
-                if (!srn.getStatus().isFixed() && srn.getMeasures().getTitle().equals("Протокол")) {
+                if (!srn.getStatus().isFixed() && srn.getMeasures() != null && srn.getMeasures().getTitle().equals("Протокол")) {
                     notes += " <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\" class=\"bi bi-briefcase\" viewBox=\"0 0 16 16\">\n" +
                             "  <title>Административный материал</title><path d=\"M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z\"/>\n" +
                             "</svg>";
                 }
-            } catch (NullPointerException e) {
+            } catch (
+                    NullPointerException e) {
                 e.printStackTrace();
             }
 
@@ -505,27 +492,27 @@ public class MainController {
 //            }
 
             stringBuilder.append("<tr ")
-                    .append(color)
-                    .append("onclick=\"location.href='/srn/manager/get?id=")
-                    .append(srn.getId())
-                    .append("'\"")
-                    .append("><td class=\"text-center\">")
-                    .append(srn.getId())
+                            .append(color)
+                            .append("onclick=\"location.href='/srn/manager/get?id=")
+                            .append(srn.getId())
+                            .append("'\"")
+                            .append("><td class=\"text-center\">")
+                            .append(srn.getId())
 //                    .append("</td><td>")
 //                    .append(miniature)
-                    .append("</td><td>")
-                    .append(srn.getCreateDate())
-                    .append("</td><td>")
-                    .append(srn.getDepartment().getTitle())
-                    .append("</td><td>")
-                    .append(srn.getFoundWho())
-                    .append("</td><td>")
-                    .append(srn.getFoundPlace())
-                    .append("</td><td class=\"text-center\">")
-                    .append(srn.getFoundDate())
-                    .append("</td><td>")
-                    .append(srn.getShortcoming().getShortTitle())
-                    .append("</td><td class=\"text-center\">")
+        .append("</td><td>")
+                            .append(srn.getCreateDate())
+                            .append("</td><td>")
+                            .append(srn.getDepartment().getTitle())
+                            .append("</td><td>")
+                            .append(srn.getFoundWho())
+                            .append("</td><td>")
+                            .append(srn.getFoundPlace())
+                            .append("</td><td class=\"text-center\">")
+                            .append(srn.getFoundDate())
+                            .append("</td><td>")
+                            .append(srn.getShortcoming().getShortTitle())
+                            .append("</td><td class=\"text-center\">")
 //                    .append(srn.getComment())
 //                    .append("</td><td>")
 //                    .append(srn.getDevices().getTitle())
@@ -535,10 +522,10 @@ public class MainController {
 //                    .append(srn.getSendTo())
 //                    .append("</td><td>")
 //                    .append(srn.getMeasuresDate())
-                    .append(srn.getStatus().getTitle())
-                    .append("</td><td class=\"text-center\">")
-                    .append(notes)
-                    .append("</td></tr>");
+        .append(srn.getStatus().getTitle())
+                            .append("</td><td class=\"text-center\">")
+                            .append(notes)
+                            .append("</td></tr>");
 
             count++;
         }

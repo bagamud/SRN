@@ -242,7 +242,7 @@
                                        formaction="${pageContext.request.contextPath}/manager/fix"
                                        value="Выполнено"/>
                                 <input class="btn btn-primary" type="button"
-                                       onclick="location.href='${pageContext.request.contextPath}/dashboard'"
+                                       onclick="history.back()"
                                        value="Назад"/>
                             </div>
                         </div>
