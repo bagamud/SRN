@@ -440,10 +440,10 @@ public class MainController {
         return "dashboard";
     }
 
-    private void srnToDashboard(Model model, Iterable<StreetRoadNetwork> allSrnByDepCode) {
+    private void srnToDashboard(Model model, Iterable<StreetRoadNetwork> allSrn) {
         StringBuilder stringBuilder = new StringBuilder();
-
-        for (StreetRoadNetwork srn : allSrnByDepCode) {
+        int count = 0;
+        for (StreetRoadNetwork srn : allSrn) {
             String color = "";
 //            boolean endTerm = new Date(new java.util.Date().getTime()).getTime()
 //                    - srn.getReferralDate().getTime()
@@ -473,15 +473,20 @@ public class MainController {
 //                }
 //            }
 
-            String control = "";
+            String notes = "";
 
             try {
                 if (srn.getControl() != null && !srn.getControl().equals("")) {
-                    control = "<div title=\"" + srn.getControl() + ". " + srn.getController() + "\">"
-                            + "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\"" +
+                    notes = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\"" +
                             " style=\"color: red\" class=\"bi bi-exclamation-circle-fill text-alert\" viewBox=\"0 0 16 16\">\n" +
-                            "  <path d=\"M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z\"/>" +
-                            "\n</svg></div>";
+                            " <title>Контроль: " + srn.getControl() + ". " + srn.getController() + "</title> <path d=\"M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z\"/>" +
+                            "\n</svg>";
+                }
+
+                if (!srn.getStatus().isFixed() && srn.getMeasures().getTitle().equals("Протокол")) {
+                    notes += " <svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" fill=\"currentColor\" class=\"bi bi-briefcase\" viewBox=\"0 0 16 16\">\n" +
+                            "  <title>Административный материал</title><path d=\"M6.5 1A1.5 1.5 0 0 0 5 2.5V3H1.5A1.5 1.5 0 0 0 0 4.5v8A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-8A1.5 1.5 0 0 0 14.5 3H11v-.5A1.5 1.5 0 0 0 9.5 1h-3zm0 1h3a.5.5 0 0 1 .5.5V3H6v-.5a.5.5 0 0 1 .5-.5zm1.886 6.914L15 7.151V12.5a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5V7.15l6.614 1.764a1.5 1.5 0 0 0 .772 0zM1.5 4h13a.5.5 0 0 1 .5.5v1.616L8.129 7.948a.5.5 0 0 1-.258 0L1 6.116V4.5a.5.5 0 0 1 .5-.5z\"/>\n" +
+                            "</svg>";
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -532,10 +537,15 @@ public class MainController {
 //                    .append(srn.getMeasuresDate())
                     .append(srn.getStatus().getTitle())
                     .append("</td><td class=\"text-center\">")
-                    .append(control)
+                    .append(notes)
                     .append("</td></tr>");
+
+            count++;
         }
+
+        String footer = "Всего выбрано материалов: " + count + ".";
         model.addAttribute("srnAllsb", stringBuilder.toString());
+        model.addAttribute("footer", footer);
     }
 
     /**

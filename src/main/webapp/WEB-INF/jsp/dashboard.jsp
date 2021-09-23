@@ -50,31 +50,7 @@
             <input class="form-control" id="foundPeriodEnd" type="date" name="foundPeriodEnd"
                    value="${formRequest.foundPeriodEnd.toLocalDate()}">
         </div>
-<%--        <div>--%>
-<%--            <label for="shortcoming">Характер недостатка</label>--%>
-<%--            <select class="form-control custom-select d-block w-100"--%>
-<%--                    id="shortcoming"--%>
-<%--                    name="shortcoming" disabled>--%>
-<%--                <option value="${formRequest.shortcoming.id}">${formRequest.shortcoming.shortTitle}</option>--%>
-<%--                ${shortcomings}--%>
-<%--            </select>--%>
-<%--        </div>--%>
-<%--        <div>--%>
-<%--            <label for="measures">Принятые меры</label>--%>
-<%--            <select class="form-control custom-select d-block w-100"--%>
-<%--                    id="measures"--%>
-<%--                    name="measures" disabled>--%>
-<%--                <option value=""></option>--%>
-<%--                ${measure}--%>
-<%--            </select>--%>
-<%--        </div>--%>
-<%--        <div>--%>
-<%--            <label for="status">Статус</label>--%>
-<%--            <select class="form-control custom-select d-block w-100" id="status" name="status" disabled>--%>
-<%--                <option value="${formRequest.status.id}">${formRequest.status.title}</option>--%>
-<%--                ${status}--%>
-<%--            </select>--%>
-<%--        </div>--%>
+
 
         <hr>
 
@@ -88,6 +64,8 @@
             </div>
         </div>
     </form>
+
+
 </nav>
 
 
@@ -110,7 +88,7 @@
                 <%--                        <th>Кому / в отношении кого</th>--%>
                 <%--                        <th>Дата принятия мер</th>--%>
                 <th>Статус</th>
-                <th>Контроль</th>
+                <th>Примечания</th>
 
             </tr>
             </thead>

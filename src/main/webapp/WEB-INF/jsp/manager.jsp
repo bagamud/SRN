@@ -324,6 +324,7 @@
             elements[i].setAttribute("title", elements[i].selectedOptions[0].text);
         }
     }
+    document.getElementById("foundDate").setAttribute('max', new Date().toISOString().substring(0, 10));
 </script>
 <jsp:include page="../template/_footer.jsp"/>
 </body>
