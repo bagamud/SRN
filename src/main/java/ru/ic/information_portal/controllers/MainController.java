@@ -135,7 +135,6 @@ public class MainController {
     @PostMapping(path = "/manager/add")
     public String addSrn(StreetRoadNetwork srn, BindingResult bindingResult, Model model) {
         model.addAttribute("data", getData(srn.getId()));
-
         User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Users user = usersRepository.findByUsername(userAuth.getUsername());
         model.addAttribute("user", user);
@@ -157,7 +156,7 @@ public class MainController {
                     srn.setFoundDate(srnRepository.findById(srn.getId()).getFoundDate());
                 }
             }
-
+            srn.setUsername(user.getUsername());
             if (srn.getStatus() == null) {
                 if (srn.getId() == 0) {
                     srn.setStatus(this.statusRepository.findById(1));
@@ -444,16 +443,27 @@ public class MainController {
     private void srnToDashboard(Model model, Iterable<StreetRoadNetwork> allSrn) {
         StringBuilder stringBuilder = new StringBuilder();
         int count = 0;
+        int inWork = 0;
+        int underControl = 0;
         for (StreetRoadNetwork srn : allSrn) {
             String color = "";
+            long fix_term = 0L;
+            try {
+                fix_term = sFixTermRepository.findByShortcomingIdAndRoadCategoryId(
+                        srn.getShortcoming().getId(),
+                        srn.getRoadCategory().getId()
+                ).getFixTerm() * 60 * 60 * 1000;
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
             if (!srn.getStatus().isFixed() && srn.getReferralDate() != null) {
                 if (new java.util.Date().getTime()
                         - srn.getReferralDate().getTime()
-                        > (7 * 24 * 60 * 60 * 1000)) {
+                        > fix_term) {
                     color = "class=\"alert-danger\"";
                 } else if (new java.util.Date().getTime()
                         - srn.getReferralDate().getTime()
-                        > (5 * 24 * 60 * 60 * 1000)) {
+                        > (fix_term - 2 * 24 * 60 * 60 * 1000)) {
                     color = "class=\"alert-warning\"";
                 }
             }
@@ -528,9 +538,12 @@ public class MainController {
                     .append("</td></tr>");
 
             count++;
+            if (!srn.getStatus().isFixed()) inWork++;
+            if (srn.isUnderControl()) underControl++;
+
         }
 
-        String footer = "Всего выбрано материалов: " + count + ".";
+        String footer = "Всего выбрано материалов: " + count + ". Из них в работе: " + inWork + ", на контроле: " + underControl;
         model.addAttribute("srnAllsb", stringBuilder.toString());
         model.addAttribute("footer", footer);
     }
